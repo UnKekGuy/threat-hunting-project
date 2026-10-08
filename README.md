@@ -2,7 +2,7 @@
 
 Topic: ransomware threats to the financial sector of Kazakhstan
 Course: Introduction to Threat Hunting (ITH), Astana IT University, 2026-2027
-Group: CS-2421, Mikhnenko Roman
+Group: CS-2421, Mikhnenko Roman, Kalyshev Akhmedi
 
 ## Idea
 
