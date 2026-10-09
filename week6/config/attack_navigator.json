@@ -1,0 +1,9 @@
+{
+  "name": "Week 6 - T1059 Technique Layer",
+  "versions": { "attack": "13", "navigator": "4.8.1", "layer": "4.3" },
+  "domain": "enterprise-attack",
+  "techniques": [
+    { "techniqueID": "T1059", "score": 100, "comment": "Command-Line Interface Simulation", "enabled": true },
+    { "techniqueID": "T1059.001", "score": 100, "comment": "PowerShell Execution", "enabled": true }
+  ]
+}

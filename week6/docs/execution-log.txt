@@ -1,0 +1,7 @@
+Command:
+  powershell.exe -File weeks/week06/scripts/simulate_t1059.ps1
+
+Terminal output:
+  zsh:1: command not found: powershell.exe
+
+Result: Not executed. The Linux workspace does not contain a PowerShell runtime.
