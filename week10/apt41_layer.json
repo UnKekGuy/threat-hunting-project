@@ -1,0 +1,304 @@
+{
+  "name": "Week 10 - APT41 (G0096)",
+  "versions": {
+    "attack": "18",
+    "navigator": "5.3.0",
+    "layer": "4.5"
+  },
+  "domain": "enterprise-attack",
+  "description": "APT41 techniques. Green = detected by this project (weeks 5-9), blue = APT41 technique not yet covered.",
+  "layout": {
+    "layout": "side",
+    "showID": true,
+    "showName": true,
+    "showSubtechniques": true
+  },
+  "legendItems": [
+    {
+      "label": "Detected with a tested query (wk5/7/9)",
+      "color": "#63BE7B"
+    },
+    {
+      "label": "APT41 technique, not covered",
+      "color": "#8EC6FF"
+    }
+  ],
+  "techniques": [
+    {
+      "techniqueID": "T1190",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1133",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1566.001",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1195.002",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.001",
+      "color": "#63BE7B",
+      "enabled": true,
+      "comment": "detected by this project"
+    },
+    {
+      "techniqueID": "T1059.003",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1047",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1569.002",
+      "color": "#63BE7B",
+      "enabled": true,
+      "comment": "detected by this project"
+    },
+    {
+      "techniqueID": "T1053.005",
+      "color": "#63BE7B",
+      "enabled": true,
+      "comment": "detected by this project"
+    },
+    {
+      "techniqueID": "T1203",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1547.001",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1543.003",
+      "color": "#63BE7B",
+      "enabled": true,
+      "comment": "detected by this project"
+    },
+    {
+      "techniqueID": "T1505.003",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1136.001",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1542.003",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1134",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1055",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1027",
+      "color": "#63BE7B",
+      "enabled": true,
+      "comment": "detected by this project"
+    },
+    {
+      "techniqueID": "T1140",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1036",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1070.001",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1553.002",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1480.001",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1003.001",
+      "color": "#63BE7B",
+      "enabled": true,
+      "comment": "detected by this project"
+    },
+    {
+      "techniqueID": "T1003.002",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1003.003",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1110",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1555.003",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1056.001",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1082",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1083",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1087",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1018",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1033",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1046",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1021.001",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1021.002",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1570",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1550.002",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1005",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1074.001",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1560",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1213",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1071.001",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1071.004",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1105",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1090",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1573.002",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1102",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1041",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1048.003",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1567.002",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1486",
+      "color": "#8EC6FF",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1496",
+      "color": "#8EC6FF",
+      "enabled": true
+    }
+  ]
+}

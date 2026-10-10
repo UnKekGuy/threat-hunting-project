@@ -21,6 +21,7 @@ Banks are one of the favorite targets of ransomware gangs, so I wanted to look a
 | 7 | Using MITRE CAR | CAR-2020-05-001 (MiniDump of LSASS) and CAR-2019-04-004 in Elasticsearch ES\|QL on 15k Sysmon events, LockBit credential dumping | [week7](week7/) |
 | 8 | Creating a Plan to Emulate an Attacker's Action | LockBit emulation plan (initial access → persistence → exfiltration) mapped to ATT&CK, with detection-coverage table and Navigator layer | [week8](week8/) |
 | 9 | Atomic Red Team | ran schtasks/service atomic tests, built the week 8 gap detections in ES\|QL (T1053.005, T1543.003/T1569.002) | [week9](week9/) |
+| 10 | Learning APT Techniques | APT41 TTPs mapped to ATT&CK, compared with LockBit, checked which project detections also catch an APT | [week10](week10/) |
 
 ## Structure
 
@@ -34,6 +35,7 @@ week6/   T1059.001 simulation script, execution log, Navigator layer
 week7/   CAR analytics as ES|QL, Elasticsearch loader, results
 week8/   LockBit adversary emulation plan and detection-coverage layer
 week9/   atomic tests for the gap techniques and their detections
+week10/  APT41 TTP analysis and overlap with our detections
 ```
 
 ## Tools
