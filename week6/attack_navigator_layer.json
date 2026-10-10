@@ -6,9 +6,11 @@
     "layer": "4.5"
   },
   "domain": "enterprise-attack",
-  "description": "Benign local PowerShell encoded-command simulation. The highlighted techniques are directly represented by the command and its encoding.",
+  "description": "Week 6: benign PowerShell encoded-command simulation (simulate_t1059.ps1), modelled on LockBit 123.ps1 from CISA AA23-325A.",
   "filters": {
-    "platforms": ["Windows"]
+    "platforms": [
+      "Windows"
+    ]
   },
   "layout": {
     "layout": "side",

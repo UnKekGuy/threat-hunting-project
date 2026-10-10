@@ -1,42 +1,48 @@
-# Week 5 Report: Threat Hunting Scenario & Query Execution
+# Week 5 - Threat Hunting Concept
 
-## Metadata
+Tasks from the syllabus: learn the threat hunting models, write a hunting hypothesis, build hunt queries for a SIEM and run them on real logs.
 
-- **Group Topic:** [Insert Your Group Topic Here]
-- **Hunt type:** Hypothesis-driven endpoint hunt
-- **Target behavior:** Suspicious PowerShell execution
-- **ATT&CK coverage:** Command and Scripting Interpreter: PowerShell ([T1059.001](https://attack.mitre.org/techniques/T1059/001/))
+## Files
 
-## Threat Hunting Methodology & Models
+- [`scripts/hunt_powershell.py`](scripts/hunt_powershell.py) - the hunt logic in Python, the same filter as the SIEM queries below
+- [`output/hunt_results.txt`](output/hunt_results.txt) - the real output of the hunt
 
-| Model | Starting point | Method | Outcome |
+## 1. Hunting models
+
+| Model | Starts from | What you do | Result |
 |---|---|---|---|
-| Intel-driven | Relevant threat intelligence: actor reporting, campaigns, malware, IOCs, or ATT&CK TTPs | Convert intelligence into environment-specific questions; search historical and current telemetry for the reported behavior and related artifacts. | Determines exposure to a known threat and produces detections or collection requirements from validated observations. |
-| Hypothesis-driven | A falsifiable statement derived from intelligence, environmental knowledge, or an observed anomaly | Define expected observable evidence, query the required telemetry, investigate positives, and accept, reject, or refine the hypothesis. | Determines whether a plausible adversary behavior occurred and improves analytic coverage even when no malicious activity is found. |
+| Intel-driven | a report, IOCs or TTPs of a known group | turn the report into questions for your own logs | do we have this threat or not |
+| Hypothesis-driven | a statement that can be proven wrong | decide what evidence should exist, query it, accept or reject the hypothesis | new detections even if nothing bad is found |
+| Data-driven (anomaly) | the data itself, a baseline of normal | look for outliers: rare parents, rare hosts, new tools | finds things nobody wrote a rule for |
 
-- SANS threat-hunting principles treat hunting as a focused, iterative, human-led activity for finding adversaries that have evaded automated detection; it is not an alert queue or a one-time IOC search.
-- A useful hypothesis specifies the suspected behavior, affected scope, evidence expected in telemetry, and a falsification condition. Repeatable workflows, explicit evidence, and avoidance of analytical anchoring make results defensible.
-- *Practical Threat Hunting* (P. Smith) emphasizes turning attacker tradecraft into observable behaviors, baselining normal activity before labeling anomalies, and iteratively converting validated hunt logic into durable detections.
-- Hunt outputs include confirmed incidents, benign-use baselines and allowlists, telemetry gaps, and detection-engineering requirements; a hunt with no confirmed compromise still creates measurable defensive value.
+Main ideas I took from the SANS papers:
 
-## Hypothesis-Driven Hunting Scenario
+- Hunting is done by a human and starts from the idea that the attacker is already inside and got past automatic alerts. It is not the same as working through an alert queue or searching for one IOC.
+- A hypothesis must say what behaviour, where, what evidence we expect and when we consider it false. Otherwise you can't finish the hunt.
+- It works like the scientific method: hypothesis, test, result, new hypothesis.
+- A hunt with no compromise found still gives results: a baseline of normal activity, missing logs, and new detection rules.
 
-### Hypothesis
+My hunt is **intel-driven + hypothesis-driven**: the intel is CISA AA23-325A from week 4, and from it I made a hypothesis.
 
-> An adversary or unauthorized tool is using `powershell.exe` or `pwsh.exe` with obfuscation or download-and-execute behavior to evade controls and retrieve or execute payloads. Affected endpoints will show PowerShell process creation or Script Block Logging containing encoded-command switches, execution-policy bypasses, `Invoke-Expression`, `Net.WebClient`, or download methods, and may show a suspicious parent process or network connection.
+## 2. Hypothesis
 
-### Scope and Expected Evidence
+In week 4 LockBit affiliates, after getting into the network through the VPN gateway, used:
 
-| Item | Requirement |
+- `123.ps1`: PowerShell that decodes base64 into a DLL;
+- HTA files started with `mshta.exe`, which then run PowerShell;
+- batch and PowerShell scripts for everything else.
+
+> **Hypothesis:** an attacker who got into a bank workstation or server runs PowerShell with hidden content (`-EncodedCommand`, `IEX`, `Net.WebClient`, download methods, `-ExecutionPolicy Bypass`) or starts PowerShell from `mshta.exe`. This will be visible in process creation events and in PowerShell Script Block Logging.
+
+| Item | Value |
 |---|---|
-| Time range | Start with the previous 30 days; expand around validated hits according to log retention. |
-| Endpoint process telemetry | Windows Security Event ID 4688 and Sysmon Event ID 1, with full command line, image, parent image, user, host, process ID, and parent process ID. |
-| PowerShell telemetry | PowerShell Operational Event ID 4104 (Script Block Logging); optionally Event IDs 4103 and 400/403 for module and engine context. |
-| Corroboration | Sysmon Event ID 3, proxy/DNS logs, EDR process tree, file creation, AMSI events, and authentication logs. |
-| Expected suspicious patterns | `-enc`/`-EncodedCommand`, `-ExecutionPolicy Bypass`/`-ep bypass`, `Invoke-Expression`/`IEX`, `System.Net.WebClient`, `DownloadString`, `DownloadFile`, `Invoke-WebRequest`/`iwr`. |
-| Falsification condition | All hits are attributable to approved automation, signed management scripts, known administrators, and expected parent processes; no corroborating anomalous execution or network activity exists. |
+| ATT&CK | [T1059.001 PowerShell](https://attack.mitre.org/techniques/T1059/001/), [T1027 Obfuscated Files](https://attack.mitre.org/techniques/T1027/), [T1218.005 Mshta](https://attack.mitre.org/techniques/T1218/005/) |
+| Time range | last 30 days, wider around any hit |
+| Logs needed | Sysmon Event ID 1, Security 4688 (with command line auditing on), PowerShell Operational 4104 |
+| Extra logs for checking hits | Sysmon 3 (network), proxy / DNS, EDR process tree, logons |
+| The hypothesis is false if | every hit comes from known admin scripts, SCCM/Intune or other approved tools with normal parents, and nothing else suspicious happened on the host |
 
-## SIEM Hunt Queries (Splunk & ELK/KQL)
+## 3. Queries
 
 ### Splunk SPL
 
@@ -47,62 +53,82 @@ index=windows (
     OR (sourcetype="XmlWinEventLog:Microsoft-Windows-PowerShell/Operational" EventCode=4104)
 )
 | eval image=lower(coalesce(Image, NewProcessName))
-| eval command_line=lower(coalesce(CommandLine, ProcessCommandLine, ScriptBlockText))
-| where match(image, "\\\\(powershell|pwsh)\\.exe$") OR match(command_line, "(?i)\\b(powershell|pwsh)(\\.exe)?\\b")
-| where match(command_line, "(?i)((^|\\s)(-|/)(enc|encodedcommand|ep|executionpolicy)\\b|(executionpolicy\\s+bypass|\\bep\\s+bypass\\b|invoke-expression|\\biex\\b|system\\.net\\.webclient|downloadstring|downloadfile|invoke-webrequest|\\biwr\\b))")
-| table _time host user EventCode image command_line ParentImage ParentProcessName ProcessId ParentProcessId ScriptBlockId
+| eval parent=lower(coalesce(ParentImage, ParentProcessName))
+| eval command_line=coalesce(CommandLine, ProcessCommandLine, ScriptBlockText)
+| where EventCode=4104 OR match(image, "\\\\(powershell|pwsh)\\.exe$")
+| eval reason=case(
+    match(command_line, "(?i)(\\s[-/](enc|encodedcommand|e|ec)\\s|executionpolicy\\s+bypass|\\s-ep\\s+bypass|invoke-expression|\\biex\\b|net\\.webclient|downloadstring|downloadfile|invoke-webrequest|\\biwr\\b)"), "suspicious arguments",
+    match(parent, "\\\\mshta\\.exe$"), "parent is mshta.exe")
+| where isnotnull(reason)
+| table _time host user EventCode reason image parent command_line
 | sort 0 - _time
 ```
 
-**Logic:** The search selects Sysmon process creation, Windows process creation, and PowerShell script-block events, normalizes alternative field names with `coalesce`, then filters for PowerShell plus obfuscation, policy-bypass, or download-cradle strings. Adapt `index`, `sourcetype`, and field aliases to the Splunk Windows add-on or CIM normalization used by the deployment.
+### Elastic (ES|QL)
 
-### ELK / Kibana Query Language (KQL)
+KQL is not good here: inside quotes `*` is not a wildcard, and keyword fields are case-sensitive, so `"*powershell*"` would miss `PowerShell.exe`. ES|QL can lowercase the field first:
 
-```kql
-winlog.event_id : (1 or 4688 or 4104) and
-(
-  winlog.event_data.Image : "*\\powershell.exe" or
-  winlog.event_data.Image : "*\\pwsh.exe" or
-  winlog.event_data.NewProcessName : "*\\powershell.exe" or
-  winlog.event_data.NewProcessName : "*\\pwsh.exe" or
-  winlog.event_data.CommandLine : "*powershell*" or
-  winlog.event_data.ScriptBlockText : "*powershell*"
-) and
-(
-  winlog.event_data.CommandLine : ("*-enc *" or "*-encodedcommand *" or "*-executionpolicy bypass*" or "*-ep bypass*" or "*invoke-expression*" or "*iex *" or "*system.net.webclient*" or "*downloadstring*" or "*downloadfile*" or "*invoke-webrequest*" or "*iwr *") or
-  winlog.event_data.ScriptBlockText : ("*-enc *" or "*-encodedcommand *" or "*-executionpolicy bypass*" or "*-ep bypass*" or "*invoke-expression*" or "*iex *" or "*system.net.webclient*" or "*downloadstring*" or "*downloadfile*" or "*invoke-webrequest*" or "*iwr *")
-)
+```esql
+FROM logs-windows*
+| WHERE event.code IN ("1", "4688", "4104")
+| EVAL cmd = TO_LOWER(COALESCE(process.command_line, powershell.file.script_block_text))
+| EVAL exe = TO_LOWER(process.executable), parent = TO_LOWER(process.parent.executable)
+| WHERE event.code == "4104" OR exe RLIKE ".*\\\\(powershell|pwsh)\\.exe"
+| EVAL reason = CASE(
+    cmd RLIKE ".*( -enc | -encodedcommand | -e | -ec |executionpolicy bypass| -ep bypass|invoke-expression|iex|net\\.webclient|downloadstring|downloadfile|invoke-webrequest|iwr ).*", "suspicious arguments",
+    parent RLIKE ".*\\\\mshta\\.exe", "parent is mshta.exe",
+    null)
+| WHERE reason IS NOT NULL
+| KEEP @timestamp, host.name, user.name, event.code, reason, exe, parent, cmd
+| SORT @timestamp DESC
 ```
 
-**Logic:** This KQL query targets the raw Winlogbeat/Elastic Agent Windows fields for the same three event IDs, requiring PowerShell evidence and at least one suspicious argument or script token. If the pipeline maps Windows events to ECS, replace `winlog.event_data.Image`, `CommandLine`, and `ScriptBlockText` with the deployment's `process.executable`, `process.command_line`, and PowerShell script-block field; verify field names in Discover before execution.
+Field names are ECS (Elastic Agent / Winlogbeat with the Windows module). For raw `winlog.event_data.*` fields the names have to be changed.
 
-## Findings Analysis & Recommended Reading Takeaways
+## 4. Running the hunt
 
-### Validate Hits vs. False Positives
+I don't have a bank SIEM, so I ran the same logic on public Windows logs from [OTRF Security-Datasets](https://github.com/OTRF/Security-Datasets). These are recorded attack simulations from a lab domain `theshire.local` with Sysmon, Security and PowerShell logging on. I took three datasets:
 
-1. Decode Base64 supplied to `-EncodedCommand` using UTF-16LE first; preserve the original event, decoded text, analyst timestamp, and hash as evidence.
-2. Reconstruct the process tree and verify the parent process, initiating user, integrity level, host role, signed binary status, and prevalence across the environment.
-3. Review Event ID 4104 and AMSI/EDR telemetry for the complete script, not only the command line; inspect child processes, dropped files, persistence, and outbound DNS/HTTP connections.
-4. Compare the execution against approved management tools, scheduled tasks, software-deployment systems, script repositories, change records, and known administrative users.
-5. Escalate hits with an untrusted parent, remote payload retrieval, obfuscated content, unusual account/host pairing, or follow-on credential access/persistence. For confirmed or unresolved malicious behavior, scope affected hosts and identities, contain according to incident-response procedures, and convert the validated logic into a monitored detection.
+| Dataset | What happens in it |
+|---|---|
+| `empire_launcher_vbs` | VBS file starts an Empire PowerShell stager (attack) |
+| `cmd_mshta_vbscript_execute_psh` | `mshta.exe` runs VBScript, which starts PowerShell (attack, like LockBit HTA) |
+| `psh_powershell_httplistener` | PowerShell opens an HTTP listener (attack, but no process creation events recorded) |
 
-### Microsoft Threat Hunting Guide Takeaways
+```
+python3 scripts/hunt_powershell.py empire_launcher_vbs_*.json cmd_mshta_vbscript_execute_psh_*.json psh_powershell_httplistener_*.json
+```
 
-- Start with a clear, testable hypothesis; Microsoft Sentinel supports hunts based on suspicious behavior, new threat campaigns, and detection gaps.
-- Select and iteratively refine queries as evidence is collected rather than treating the initial query as final.
-- Preserve hunt results and bookmarks, correlate entities and evidence, and create an incident or detection rule when the hunt exposes actionable malicious activity.
-- Use MITRE ATT&CK mapping to identify coverage gaps and to prioritize additional hunting queries and data collection.
-- Treat negative results as feedback: document the scope searched, telemetry quality, limitations, and the next collection or detection improvement.
+Result ([full output](output/hunt_results.txt)):
 
-## Deliverable Placeholders
+| Dataset | Hits | What was found |
+|---|---|---|
+| empire_launcher_vbs | 3 (Sysmon 1, 4688, 4104) | `powershell.exe -noP -sta -w 1 -enc SQBmACgA...` with parent `wscript.exe`. The base64 decodes to a script that turns off Script Block Logging through `cachedGroupPolicySettings` and then downloads the next stage with `Net.WebClient` + `IEX`. |
+| cmd_mshta_vbscript_execute_psh | 2 (4688, Sysmon 1) | `powershell.exe -noexit -command Get-Service sysmon` with parent `mshta.exe` |
+| psh_powershell_httplistener | 0 | - |
 
-![Splunk Query Execution](./images/splunk_hunt_results.png)
+## 5. Analysis
 
-> 🎥 **Video Walkthrough:** [Link to demo recording]
+**Empire launcher: true positive.** Everything is wrong here: PowerShell started by `wscript.exe`, hidden window (`-w 1`), encoded command, and the decoded script disables logging and downloads code. In a bank this would go straight to incident response: isolate `WORKSTATION5`, find where the VBS file came from, check the network connections.
+
+**mshta: found only because of the second rule.** The first version of my query (only suspicious arguments) gave **0 hits** on this dataset, because the command `Get-Service sysmon` is normal. It was found only after I added "parent is mshta.exe". This is a good lesson: the attacker does not have to use `-enc`, and the parent-child relation catches what the command line does not. The command itself checks whether Sysmon is running, which is reconnaissance of defences.
+
+**HTTP listener: 0 hits = a telemetry gap, not "clean".** This dataset has no Sysmon 1 / 4688 for the PowerShell process, so a query on process creation can't find it. A hunt result means nothing without checking that the needed logs exist.
+
+How to check a hit before calling it an incident:
+
+1. Decode the base64 (it's UTF-16LE) and read the script.
+2. Look at the process tree: who is the parent, which user, which host.
+3. Check 4104 for the full script and Sysmon 3 / DNS for network connections.
+4. Compare with known admin scripts and deployment tools.
+5. If it is malicious, scope the other hosts with the same command and turn the query into a scheduled detection.
+
+Ideas from the Microsoft Sentinel hunting guide that I used: start with a clear hypothesis, change the query while you hunt (I added the mshta rule), save the results, and when the hunt finds something real, turn it into an analytics rule.
 
 ## References
 
-1. SANS Institute, [*The Who, What, Where, When, Why and How of Effective Threat Hunting*](https://www.sans.org/white-papers/who-what-where-when-why-how-effective-threat-hunting/).
-2. SANS Institute, [*Applying the Scientific Method to Threat Hunting*](https://www.sans.org/white-papers/39610/).
+1. SANS, [The Who, What, Where, When, Why and How of Effective Threat Hunting](https://www.sans.org/white-papers/who-what-where-when-why-how-effective-threat-hunting/).
+2. J. Kerwin, SANS, [Applying the Scientific Method to Threat Hunting](https://www.sans.org/white-papers/39610/), 2020.
 3. Microsoft Learn, [Conduct end-to-end threat hunting with hunts in Microsoft Sentinel](https://learn.microsoft.com/azure/sentinel/hunts).
-4. P. Smith, *Practical Threat Hunting* (recommended reading).
+4. CISA, [AA23-325A](https://www.cisa.gov/news-events/cybersecurity-advisories/aa23-325a).
+5. OTRF, [Security-Datasets](https://github.com/OTRF/Security-Datasets): [Empire VBS Execution](https://securitydatasets.com/notebooks/atomic/windows/execution/SDWIN-190518182022.html), [Mshta VBScript Execute PowerShell](https://securitydatasets.com/notebooks/atomic/windows/defense_evasion/SDWIN-201022025808.html), [PowerShell HTTP Listener](https://securitydatasets.com/notebooks/atomic/windows/execution/SDWIN-201102041306.html).

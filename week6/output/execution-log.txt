@@ -1,0 +1,10 @@
+$ uname -sr; pwsh --version
+Linux 7.2.3-1-cachyos
+PowerShell 7.6.6
+
+$ pwsh -NoProfile -File week6/scripts/simulate_t1059.ps1
+[+] Executing T1059.001 (Command and Scripting Interpreter: PowerShell) Simulation...
+[+] Encoded command: VwByAGkAdABlAC0ATwB1AHQAcAB1AHQAIAAnAEEAVABUACYAQwBLACAAVAAxADAANQA5ACAAUwBpAG0AdQBsAGEAdABpAG8AbgAgAEUAeABlAGMAdQB0AGUAZAAgAFMAdQBjAGMAZQBzAHMAZgB1AGwAbAB5ACcA
+[+] Child process: /tmp/claude-1000/-home-unkek/6998e02f-65b1-4247-9ca6-6d3953cb55a3/scratchpad/pwsh/pwsh -EncodedCommand <base64>
+ATT&CK T1059 Simulation Executed Successfully
+exit code: 0
