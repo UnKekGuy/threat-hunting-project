@@ -1,0 +1,11 @@
+// Gap from week 8: T1053.005 Scheduled Task persistence
+// A scheduled task is created (Security 4698) whose action runs PowerShell,
+// an encoded command, or IEX - the LockBit "UpdateAdobeTask" pattern.
+FROM winlogs
+| WHERE EventID == 4698
+  AND (TO_LOWER(TaskContent) LIKE "*powershell*"
+    OR TO_LOWER(TaskContent) LIKE "*-enc*"
+    OR TO_LOWER(TaskContent) LIKE "*iex*"
+    OR TO_LOWER(TaskContent) LIKE "*frombase64string*")
+| KEEP @timestamp, dataset, Hostname, SubjectUserName, TaskName
+| SORT @timestamp

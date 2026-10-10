@@ -1,0 +1,11 @@
+// Gap from week 8: T1543.003 / T1569.002 service used for exec & lateral movement
+// A Windows service is installed (Security 7045) whose ImagePath runs cmd/powershell
+// or an encoded command instead of a normal binary - the PsExec/Empire pattern.
+FROM winlogs
+| WHERE EventID == 7045
+  AND (TO_LOWER(ImagePath) LIKE "*powershell*"
+    OR TO_LOWER(ImagePath) LIKE "*cmd*"
+    OR TO_LOWER(ImagePath) LIKE "*-enc*"
+    OR TO_LOWER(ImagePath) LIKE "*%comspec%*")
+| KEEP @timestamp, dataset, Hostname, ServiceName, ImagePath
+| SORT @timestamp
