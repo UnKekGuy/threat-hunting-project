@@ -1,0 +1,9 @@
+// CAR-2020-05-001 MiniDump of LSASS
+// Sysmon 10: a process opens lsass.exe and the call stack goes through dbghelp.dll / dbgcore.dll,
+// the DLLs that export MiniDumpWriteDump()
+FROM winlogs
+| WHERE EventID == 10
+  AND ENDS_WITH(TO_LOWER(TargetImage), "\\lsass.exe")
+  AND (TO_LOWER(CallTrace) LIKE "*dbghelp.dll*" OR TO_LOWER(CallTrace) LIKE "*dbgcore.dll*")
+| KEEP @timestamp, dataset, Hostname, SourceImage, SourceProcessId, GrantedAccess
+| SORT @timestamp

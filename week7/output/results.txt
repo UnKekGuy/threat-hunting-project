@@ -1,0 +1,31 @@
+Elasticsearch 9.5.5, index winlogs, 15121 events
+
+$ python3 scripts/run_esql.py http://127.0.0.1:9201 queries/*.esql
+== queries/car-2020-05-001.esql: 3 rows
+@timestamp | dataset | Hostname | SourceImage | SourceProcessId | GrantedAccess
+2020-09-22T08:38:29.043Z | rdp_interactive_taskmanager_lsass_dump | WORKSTATION5.theshire.local | C:\windows\system32\taskmgr.exe | 624 | 0x1fffff
+2020-10-18T07:50:06.025Z | psh_lsass_memory_dump_comsvcs | WORKSTATION5 | C:\Windows\System32\rundll32.exe | 4824 | 0x1fffff
+2020-10-18T10:56:14.371Z | cmd_lsass_memory_dumpert_syscalls | WORKSTATION5 | C:\Users\wardog\Desktop\Outflank-Dumpert.exe | 6772 | 0x1fffff
+
+== queries/car-2019-04-004.esql: 3 rows
+@timestamp | dataset | Hostname | SourceImage | SourceProcessId | GrantedAccess
+2020-08-07T14:32:57.589Z | empire_mimikatz_logonpasswords | WORKSTATION5.theshire.local | C:\windows\System32\WindowsPowerShell\v1.0\powershell.exe | 1648 | 0x1010
+2020-09-22T08:38:16.592Z | rdp_interactive_taskmanager_lsass_dump | WORKSTATION5.theshire.local | C:\windows\system32\taskmgr.exe | 624 | 0x1410
+2020-10-18T07:50:06.001Z | psh_lsass_memory_dump_comsvcs | WORKSTATION5 | C:\Windows\System32\rundll32.exe | 4824 | 0x1410
+
+== queries/lsass-access-baseline.esql: 13 rows
+events | dataset | SourceImage | GrantedAccess
+2 | cmd_lsass_memory_dumpert_syscalls | C:\Users\wardog\Desktop\Outflank-Dumpert.exe | 0x1fffff
+2 | empire_launcher_vbs | C:\windows\system32\svchost.exe | 0x1000
+2 | empire_mimikatz_logonpasswords | C:\windows\system32\svchost.exe | 0x1000
+1 | empire_mimikatz_logonpasswords | C:\windows\system32\svchost.exe | 0x2000
+1 | empire_mimikatz_logonpasswords | C:\windows\System32\WindowsPowerShell\v1.0\powershell.exe | 0x1010
+1 | psh_lsass_memory_dump_comsvcs | C:\Windows\System32\rundll32.exe | 0x1410
+1 | psh_lsass_memory_dump_comsvcs | C:\Windows\System32\rundll32.exe | 0x1fffff
+13 | rdp_interactive_taskmanager_lsass_dump | C:\windows\system32\svchost.exe | 0x1000
+7 | rdp_interactive_taskmanager_lsass_dump | C:\windows\system32\svchost.exe | 0x3000
+3 | rdp_interactive_taskmanager_lsass_dump | C:\windows\system32\taskmgr.exe | 0x1000
+2 | rdp_interactive_taskmanager_lsass_dump | C:\windows\system32\taskmgr.exe | 0x1fffff
+1 | rdp_interactive_taskmanager_lsass_dump | C:\windows\system32\taskmgr.exe | 0x1410
+1 | rdp_interactive_taskmanager_lsass_dump | C:\windows\system32\taskmgr.exe | 0x1400
+

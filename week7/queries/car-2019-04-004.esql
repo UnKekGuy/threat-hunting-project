@@ -1,0 +1,8 @@
+// CAR-2019-04-004 Credential Dumping via Mimikatz ("Outliers" version, without the call trace)
+// Sysmon 10: lsass.exe opened with the access masks that Mimikatz uses
+FROM winlogs
+| WHERE EventID == 10
+  AND ENDS_WITH(TO_LOWER(TargetImage), "\\lsass.exe")
+  AND GrantedAccess IN ("0x1410", "0x1010", "0x1438", "0x143a", "0x1418")
+| KEEP @timestamp, dataset, Hostname, SourceImage, SourceProcessId, GrantedAccess
+| SORT @timestamp

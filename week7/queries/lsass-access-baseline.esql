@@ -1,0 +1,5 @@
+// Baseline: who opens lsass.exe at all, and with which access masks
+FROM winlogs
+| WHERE EventID == 10 AND ENDS_WITH(TO_LOWER(TargetImage), "\\lsass.exe")
+| STATS events = COUNT(*) BY dataset, SourceImage, GrantedAccess
+| SORT dataset, events DESC

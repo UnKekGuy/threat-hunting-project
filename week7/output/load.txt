@@ -1,0 +1,8 @@
+$ python3 scripts/load_to_elastic.py http://127.0.0.1:9201 <7 OTRF datasets>
+psh_lsass_memory_dump_comsvcs: 184 events, errors=False
+rdp_interactive_taskmanager_lsass_dump: 5489 events, errors=False
+cmd_lsass_memory_dumpert_syscalls: 118 events, errors=False
+empire_mimikatz_logonpasswords: 6026 events, errors=False
+empire_launcher_vbs: 2067 events, errors=False
+cmd_mshta_vbscript_execute_psh: 1127 events, errors=False
+psh_powershell_httplistener: 110 events, errors=False
