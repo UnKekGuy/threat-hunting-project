@@ -1,77 +1,112 @@
-# Week 4 Report: Cyber Kill Chain Analysis & ATT&CK Mapping
+# Week 4 - The Cyber Kill Chain
 
-## Metadata
+Tasks from the syllabus: take a real attack, split it into the 7 stages of the Lockheed Martin Cyber Kill Chain and map every stage to MITRE ATT&CK.
 
-- **Group Topic:** [Insert Your Group Topic Here]
-- **Incident:** SolarWinds Orion / SUNBURST supply-chain compromise (APT29)
-- **Frameworks:** Lockheed Martin Cyber Kill Chain; MITRE ATT&CK Enterprise
-- **Scope note:** The Kill Chain is a linear analytical model; ATT&CK records tactics and techniques that can overlap across stages. Mappings below prioritize publicly reported SolarWinds activity and identify analytical mappings where public reporting does not establish a discrete stage.
+## Which attack and why
 
-## Cyberattack Analysis (Kill Chain)
+I took **LockBit 3.0 affiliates exploiting Citrix Bleed (CVE-2023-4966)** from the CISA advisory [AA23-325A](https://www.cisa.gov/news-events/cybersecurity-advisories/aa23-325a). Reasons:
+
+- LockBit is in the top of the groups that attack the financial sector (week 2 chart), and its IOCs from this advisory are already in our MISP (week 3, `week2/data/cisa/lockbit_AA23-325A.json`).
+- The same wave of attacks hit a bank: on 8-9 November 2023 LockBit encrypted **ICBC Financial Services**, the US broker-dealer of the biggest bank in the world. The bank could not settle Treasury trades and had to send settlement data on a USB stick. Researchers pointed to an unpatched Citrix NetScaler as the likely entry point ([Dark Reading](https://www.darkreading.com/vulnerabilities-threats/citrixbleed-linked-to-ransomware-hit-on-china-s-state-owned-bank)). Official confirmation of the entry point was not published, so below I use the Boeing case from the CISA advisory, where all steps are documented.
+- Banks in Kazakhstan also use NetScaler / VPN gateways for remote access, so this scenario is realistic for them.
+
+## Kill Chain diagram
+
+```mermaid
+flowchart LR
+    R["1 Reconnaissance<br/>find NetScaler<br/>on the internet"] --> W["2 Weaponization<br/>Citrix Bleed exploit,<br/>123.ps1 + adobelib.dll"]
+    W --> D["3 Delivery<br/>crafted HTTP GET<br/>to the gateway"]
+    D --> E["4 Exploitation<br/>memory leak gives<br/>session cookie, no MFA"]
+    E --> I["5 Installation<br/>PowerShell drops DLL,<br/>rundll32, AnyDesk,<br/>scheduled tasks"]
+    I --> C["6 Command & Control<br/>HTTPS POST,<br/>Plink SSH tunnel, RMM"]
+    C --> A["7 Actions on Objectives<br/>LSASS dump, PsExec/WMI,<br/>7z + MEGA, encryption"]
+```
+
+## The 7 stages
 
 ### 1. Reconnaissance
-
-APT29 selected high-value government and private-sector organizations and obtained credentials for use against victim environments. Public ATT&CK reporting records credential-focused activity in the campaign, while the precise pre-compromise collection methods and target-selection process are not fully public.
+The attackers needed internet-facing NetScaler ADC / Gateway appliances with a vulnerable version. Citrix Bleed was exploited as a zero-day from August 2023 and the patch came out on 10 October 2023, so after that anyone could scan for unpatched gateways. The advisory does not describe how exactly targets were picked, so this stage is my analysis, not a reported fact.
 
 ### 2. Weaponization
-
-The actor developed SUNBURST, a trojanized DLL designed to fit the SolarWinds Orion update framework, and used SUNSPOT to inject malicious code into the Orion build process. The resulting malicious component was signed with SolarWinds code-signing certificates, allowing it to appear as trusted software.
+- An exploit for CVE-2023-4966: one HTTP GET request with a very long `Host` header makes the appliance return a piece of its memory.
+- A loader script `123.ps1`: two base64 strings that are glued together and decoded into `adobelib.dll`. The DLL only runs with a 104-character key, so a sandbox without the key sees nothing.
 
 ### 3. Delivery
-
-SolarWinds distributed the signed, compromised Orion updates through its normal update channel between March and June 2020. This delivery method placed the SUNBURST backdoor in customer environments without requiring a phishing attachment or direct interaction by the operator.
+No phishing. The request goes straight to the public NetScaler Gateway, the same address the bank's employees use for VPN.
 
 ### 4. Exploitation
-
-For victims that installed the affected update, the trusted software supply chain provided initial execution rather than a conventional vulnerability exploit. In follow-on activity, APT29 also exploited CVE-2020-0688 in Microsoft Exchange Control Panel to regain access to a network.
+The leaked memory contains a valid NetScaler AAA **session cookie**. The attacker puts it in the browser and is logged in as a real user, without a password and without MFA. After that the advisory lists `T1082` system discovery from the hijacked session.
 
 ### 5. Installation
-
-SUNBURST enabled selective follow-on deployment of second-stage tooling, including TEARDROP and Raindrop, on chosen targets. APT29 established persistence using scheduled tasks and WMI event subscriptions, including boot-triggered execution of a backdoor through `rundll32.exe`.
+- `123.ps1` writes `C:\Users\Public\adobelib.dll` and starts it with `rundll32 C:\Users\Public\adobelib.dll,main <key>`.
+- Remote access tools are installed: AnyDesk (as an auto-start service), Splashtop, ScreenConnect renamed to `1.exe`/`m.exe`, Atera, TeamViewer and others.
+- Persistence through scheduled tasks `UpdateAdobeTask` and `\MEGA\MEGAcmd`.
 
 ### 6. Command & Control
-
-SUNBURST used DNS traffic crafted to resemble normal SolarWinds API communications and communicated with third-party servers using HTTP GET/POST. The campaign also used dynamically resolved subdomains and actor-controlled domains to route command-and-control traffic.
+- `adobelib.dll` sends HTTPS POST requests to `adobe-us-updatefiles[.]digital` (Cloudflare IPs 172.67.129.176 and 104.21.1.180, I checked them in Shodan in week 2).
+- Plink renamed to `servicehost.exe` opens a reverse SSH tunnel to 168.100.9.137.
+- The RMM tools themselves are also a C2 channel.
 
 ### 7. Actions on Objectives
+- Credentials: Mimikatz, LSASS dump to `c:\perflogs\lsass.dmp`, SAM/SYSTEM hives saved by `a.bat`, `veeam-get-creds.ps1` for backup passwords.
+- Lateral movement with PsExec and `wmiexec`.
+- Data is packed with 7-Zip and taken out through MEGA, FTP and temp.sh.
+- Before encryption `taskkill /f` stops SQL Server processes so the databases can be encrypted. Then LockBit encrypts the files.
 
-APT29 used compromised credentials, forged SAML tokens, and cloud access to access targeted enterprise resources and mailboxes. It collected targeted email and local-system data, compressed stolen material into password-protected archives, and exfiltrated data over HTTPS.
+For a bank this last stage means stolen client data plus stopped core systems, which is exactly what happened at ICBC.
 
-## MITRE ATT&CK Mapping Table
+## MITRE ATT&CK mapping
 
-| Kill Chain Stage | ATT&CK Tactic | Technique Name | Technique ID |
+Techniques marked * are in the CISA ATT&CK tables. The others come from the advisory text or from my analysis.
+
+| Kill Chain stage | ATT&CK tactic | Technique | ID |
 |---|---|---|---|
-| Reconnaissance | Reconnaissance | Gather Victim Identity Information: Credentials | [T1589.001](https://attack.mitre.org/techniques/T1589/001/) |
+| Reconnaissance | Reconnaissance | Active Scanning: Vulnerability Scanning (my analysis) | [T1595.002](https://attack.mitre.org/techniques/T1595/002/) |
+| Weaponization | Resource Development | Obtain Capabilities: Exploits | [T1588.005](https://attack.mitre.org/techniques/T1588/005/) |
 | Weaponization | Resource Development | Develop Capabilities: Malware | [T1587.001](https://attack.mitre.org/techniques/T1587/001/) |
-| Weaponization | Defense Evasion | Subvert Trust Controls: Code Signing | [T1553.002](https://attack.mitre.org/techniques/T1553/002/) |
-| Delivery | Initial Access | Supply Chain Compromise: Compromise Software Supply Chain | [T1195.002](https://attack.mitre.org/techniques/T1195/002/) |
-| Exploitation | Initial Access | Exploit Public-Facing Application | [T1190](https://attack.mitre.org/techniques/T1190/) |
+| Delivery / Exploitation | Initial Access | Exploit Public-Facing Application | [T1190](https://attack.mitre.org/techniques/T1190/) |
+| Exploitation | Credential Access | Steal Web Session Cookie * | [T1539](https://attack.mitre.org/techniques/T1539/) |
+| Exploitation | Credential Access | Modify Authentication Process: MFA * | [T1556.006](https://attack.mitre.org/techniques/T1556/006/) |
+| Exploitation | Lateral Movement | Remote Service Session Hijacking | [T1563](https://attack.mitre.org/techniques/T1563/) |
+| Exploitation | Discovery | System Information Discovery * | [T1082](https://attack.mitre.org/techniques/T1082/) |
+| Installation | Execution | Command and Scripting Interpreter: PowerShell | [T1059.001](https://attack.mitre.org/techniques/T1059/001/) |
+| Installation | Defense Evasion | Deobfuscate/Decode Files or Information | [T1140](https://attack.mitre.org/techniques/T1140/) |
+| Installation | Defense Evasion | System Binary Proxy Execution: Rundll32 | [T1218.011](https://attack.mitre.org/techniques/T1218/011/) |
 | Installation | Persistence | Scheduled Task/Job: Scheduled Task | [T1053.005](https://attack.mitre.org/techniques/T1053/005/) |
-| Installation | Persistence | Event Triggered Execution: Windows Management Instrumentation Event Subscription | [T1546.003](https://attack.mitre.org/techniques/T1546/003/) |
+| Installation | Persistence | Create or Modify System Process: Windows Service | [T1543.003](https://attack.mitre.org/techniques/T1543/003/) |
 | Command & Control | Command and Control | Application Layer Protocol: Web Protocols | [T1071.001](https://attack.mitre.org/techniques/T1071/001/) |
-| Command & Control | Command and Control | Application Layer Protocol: DNS | [T1071.004](https://attack.mitre.org/techniques/T1071/004/) |
-| Actions on Objectives | Credential Access | Forge Web Credentials: SAML Tokens | [T1606.002](https://attack.mitre.org/techniques/T1606/002/) |
-| Actions on Objectives | Collection | Email Collection: Remote Email Collection | [T1114.002](https://attack.mitre.org/techniques/T1114/002/) |
-| Actions on Objectives | Exfiltration | Exfiltration Over Alternative Protocol: Exfiltration Over Asymmetric Encrypted Non-C2 Protocol | [T1048.002](https://attack.mitre.org/techniques/T1048/002/) |
+| Command & Control | Command and Control | Protocol Tunneling | [T1572](https://attack.mitre.org/techniques/T1572/) |
+| Command & Control | Command and Control | Remote Access Tools | [T1219](https://attack.mitre.org/techniques/T1219/) |
+| Actions on Objectives | Credential Access | OS Credential Dumping: LSASS Memory | [T1003.001](https://attack.mitre.org/techniques/T1003/001/) |
+| Actions on Objectives | Credential Access | OS Credential Dumping: Security Account Manager | [T1003.002](https://attack.mitre.org/techniques/T1003/002/) |
+| Actions on Objectives | Execution | System Services: Service Execution (PsExec) | [T1569.002](https://attack.mitre.org/techniques/T1569/002/) |
+| Actions on Objectives | Execution | Windows Management Instrumentation (wmiexec) | [T1047](https://attack.mitre.org/techniques/T1047/) |
+| Actions on Objectives | Collection | Archive Collected Data: Archive via Utility | [T1560.001](https://attack.mitre.org/techniques/T1560/001/) |
+| Actions on Objectives | Exfiltration | Exfiltration Over Web Service: to Cloud Storage | [T1567.002](https://attack.mitre.org/techniques/T1567/002/) |
+| Actions on Objectives | Impact | Service Stop | [T1489](https://attack.mitre.org/techniques/T1489/) |
+| Actions on Objectives | Impact | Data Encrypted for Impact | [T1486](https://attack.mitre.org/techniques/T1486/) |
 
-## Intelligence-Driven Defense Analysis
+## Where a bank could break the chain
 
-- Treat the adversary, not only the vulnerability, as a component of risk; use knowledge of the actor's capabilities, infrastructure, and objectives to anticipate future activity.
-- Model intrusions as a sequence of adversary actions. Detecting or mitigating any required phase disrupts the operation before the objective is achieved.
-- Map indicators and observations from each intrusion phase to specific defensive courses of action for detection, mitigation, response, and measurement.
-- Link discrete intrusions into campaigns through recurring indicators, infrastructure, malware, and TTP patterns; campaign-level context produces more actionable intelligence than isolated alerts.
-- Operate an iterative intelligence feedback loop: collection improves analysis, analysis directs defenses, and defensive results generate new collection requirements.
-- Use threat-driven analysis to prioritize security investments and assess defensive effectiveness against the adversary's demonstrated behavior.
+| Stage | What would stop it |
+|---|---|
+| Reconnaissance / Exploitation | Patch internet-facing gateways in 24-48 hours (CVE-2023-4966 is in CISA KEV), kill all sessions after patching |
+| Exploitation | Alert when one VPN session is used from two or more public IPs |
+| Installation | Allowlist for RMM tools, PowerShell Script Block Logging, alert on `rundll32` loading a DLL from `C:\Users\Public` |
+| C2 | Block new domains and outbound SSH from servers |
+| Actions on Objectives | LSASS protection, offline backups, alert on mass `taskkill` of SQL processes |
 
-## Deliverable Placeholders
+The earlier the chain is broken, the cheaper it is. Stopping it at stage 4 means no encryption at all, and at stage 7 it is already an incident.
 
-![Kill Chain Diagram](./images/kill_chain_map.png)
+## What I learned from the Lockheed Martin paper
 
-> 🎥 **Video Demo:** [Link to recording]
+- The Kill Chain is a model for the defender: the attacker has to pass all 7 stages, and the defender only needs to break one.
+- Intrusions should be linked into campaigns by the same indicators and TTPs. Here the same LockBit TTPs (Citrix Bleed, AnyDesk, `123.ps1`) connect Boeing, ICBC and other victims.
+- Kill Chain stages are linear but ATT&CK tactics are not. For example T1539 and T1563 are both "Exploitation" for me, but in ATT&CK they are Credential Access and Lateral Movement.
 
 ## References
 
-1. Lockheed Martin, [*Intelligence-Driven Computer Network Defense: Informed by Analysis of Adversary Campaigns and Intrusion Kill Chains*](https://www.lockheedmartin.com/content/dam/lockheed-martin/rms/documents/cyber/LM-White-Paper-Intel-Driven-Defense.pdf).
-2. MITRE ATT&CK, [SolarWinds Compromise (C0024)](https://attack.mitre.org/campaigns/C0024/).
-3. MITRE ATT&CK, [SUNBURST (S0559)](https://attack.mitre.org/software/S0559/).
-4. CISA, [Active Exploitation of SolarWinds Software](https://www.cisa.gov/news-events/alerts/2020/12/13/active-exploitation-solarwinds-software).
+1. Lockheed Martin, [Intelligence-Driven Computer Network Defense Informed by Analysis of Adversary Campaigns and Intrusion Kill Chains](https://www.lockheedmartin.com/content/dam/lockheed-martin/rms/documents/cyber/LM-White-Paper-Intel-Driven-Defense.pdf).
+2. CISA, [AA23-325A: LockBit 3.0 Ransomware Affiliates Exploit CVE 2023-4966 Citrix Bleed Vulnerability](https://www.cisa.gov/news-events/cybersecurity-advisories/aa23-325a).
+3. Dark Reading, [CitrixBleed Linked to Ransomware Hit on China's State-Owned Bank](https://www.darkreading.com/vulnerabilities-threats/citrixbleed-linked-to-ransomware-hit-on-china-s-state-owned-bank).
+4. MITRE ATT&CK, [LockBit 3.0 (S1202)](https://attack.mitre.org/software/S1202/).
