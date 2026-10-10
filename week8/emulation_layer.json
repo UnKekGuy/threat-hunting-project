@@ -1,0 +1,163 @@
+{
+  "name": "Week 8 - LockBit emulation plan",
+  "versions": {
+    "attack": "18",
+    "navigator": "5.3.0",
+    "layer": "4.5"
+  },
+  "domain": "enterprise-attack",
+  "description": "LockBit 3.0 emulation plan (CISA AA23-325A). Green=detected in weeks 5-7, yellow=partial, red=detection gap.",
+  "filters": {
+    "platforms": [
+      "Windows"
+    ]
+  },
+  "layout": {
+    "layout": "side",
+    "showID": true,
+    "showName": true,
+    "showSubtechniques": true
+  },
+  "legendItems": [
+    {
+      "label": "Detected (weeks 5-7)",
+      "color": "#63BE7B"
+    },
+    {
+      "label": "Partial",
+      "color": "#FFD966"
+    },
+    {
+      "label": "Gap",
+      "color": "#E06666"
+    }
+  ],
+  "techniques": [
+    {
+      "techniqueID": "T1133",
+      "color": "#E06666",
+      "enabled": true,
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1190",
+      "color": "#E06666",
+      "enabled": true,
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1082",
+      "color": "#E06666",
+      "enabled": true,
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1033",
+      "color": "#E06666",
+      "enabled": true,
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1018",
+      "color": "#E06666",
+      "enabled": true,
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1087.002",
+      "color": "#E06666",
+      "enabled": true,
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1059.001",
+      "color": "#63BE7B",
+      "enabled": true,
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1027",
+      "color": "#63BE7B",
+      "enabled": true,
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1053.005",
+      "color": "#FFD966",
+      "enabled": true,
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1543.003",
+      "color": "#FFD966",
+      "enabled": true,
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1219",
+      "color": "#E06666",
+      "enabled": true,
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1003.001",
+      "color": "#63BE7B",
+      "enabled": true,
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1569.002",
+      "color": "#E06666",
+      "enabled": true,
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1047",
+      "color": "#E06666",
+      "enabled": true,
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1021.002",
+      "color": "#E06666",
+      "enabled": true,
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1074.001",
+      "color": "#E06666",
+      "enabled": true,
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1560.001",
+      "color": "#E06666",
+      "enabled": true,
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1567.002",
+      "color": "#E06666",
+      "enabled": true,
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1041",
+      "color": "#E06666",
+      "enabled": true,
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1489",
+      "color": "#FFD966",
+      "enabled": true,
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1486",
+      "color": "#FFD966",
+      "enabled": true,
+      "showSubtechniques": true
+    }
+  ]
+}

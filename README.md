@@ -19,6 +19,7 @@ Banks are one of the favorite targets of ransomware gangs, so I wanted to look a
 | 5 | Threat Hunting Concept | hypothesis from the LockBit TTPs, Splunk and ES\|QL queries, hunt run on OTRF Security-Datasets logs | [week5](week5/) |
 | 6 | ATT&CK Framework | T1059.001 PowerShell encoded-command simulation, real run, Navigator layer | [week6](week6/) |
 | 7 | Using MITRE CAR | CAR-2020-05-001 (MiniDump of LSASS) and CAR-2019-04-004 in Elasticsearch ES\|QL on 15k Sysmon events, LockBit credential dumping | [week7](week7/) |
+| 8 | Creating a Plan to Emulate an Attacker's Action | LockBit emulation plan (initial access → persistence → exfiltration) mapped to ATT&CK, with detection-coverage table and Navigator layer | [week8](week8/) |
 
 ## Structure
 
@@ -30,6 +31,7 @@ week4/   Kill Chain analysis of LockBit / Citrix Bleed with ATT&CK mapping
 week5/   hunting hypothesis, SIEM queries, hunt script and its output
 week6/   T1059.001 simulation script, execution log, Navigator layer
 week7/   CAR analytics as ES|QL, Elasticsearch loader, results
+week8/   LockBit adversary emulation plan and detection-coverage layer
 ```
 
 ## Tools
