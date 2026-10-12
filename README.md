@@ -17,6 +17,7 @@ Banks are one of the favorite targets of ransomware gangs, so I wanted to look a
 | 3 | Data Processing and Exploitation | MISP deployed, 259 IOCs cleaned and imported, some filter queries | [week3](week3/) |
 | 4 | The Cyber Kill Chain | LockBit 3.0 via Citrix Bleed (CISA AA23-325A, ICBC case) split into 7 stages and mapped to ATT&CK | [week4](week4/) |
 | 5 | Threat Hunting Concept | hypothesis from the LockBit TTPs, Splunk and ES\|QL queries, hunt run on OTRF Security-Datasets logs | [week5](week5/) |
+| - | Lab 15.0.3 Creating Codes | AES encryption/decryption with a shared key, wrong-key test (OpenSSL) | [labs/15.0.3-creating-codes](labs/15.0.3-creating-codes/) |
 
 ## Structure
 
@@ -26,6 +27,7 @@ week2/   collection scripts, data source map, charts
 week3/   MISP setup (podman), normalization and import scripts, screenshots
 week4/   Kill Chain analysis of LockBit / Citrix Bleed with ATT&CK mapping
 week5/   hunting hypothesis, SIEM queries, hunt script and its output
+labs/    NetAcad labs (15.0.3 Creating Codes: AES with OpenSSL)
 
 ```
 
