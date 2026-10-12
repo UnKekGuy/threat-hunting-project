@@ -1,31 +1,6 @@
-== Part 2: Partner A encrypts a message ==
-Plaintext : LockBit affiliates use Citrix Bleed (CVE-2023-4966) for initial access. Patch NetScaler today.
-Secret key: netsec
-Ciphertext (base64): U2FsdGVkX185w+Cw4OXjbh7YDSlU1fRA1WMSOGPqZw1761KvkntQdlnAc+kV0ov8JX3gQFkCkqAFO5ibS15koqkhoc+Ixvq0gJCDL86radJou3Lrm6ilSJjPv4Whp5MvYz8GjHkrtOxnJtYLQDLzYQ==
+The weather is nice today, let's go for a walk in the park.
+U2FsdGVkX193FwWWRNfsWb4MqIzTmUZC7JTwNKfuDVBbtWz7znc3Y/RyNIjv7WgcHjr8XY+ZKbDi1FyRUdhtTw+AtHQEBvrw6vWnpZhwchQ=
 
-== Part 2: Partner B encrypts a message ==
-Plaintext : Meet at the SOC at 10:00, bring the MISP export.
-Secret key: netsec
-Ciphertext (base64): U2FsdGVkX1+EkybviohXCB61jMrpJd2md44UklhGoihYwmlB/cMeocoq4m94f6gV72Ok+SwvCqidzpqMhMwuc/D0cXCIkT64ZXlYUU2d7lM=
+Don't forget to buy milk and bread on the way home.
+U2FsdGVkX1/6JyJFC3VcZY/P6tEnt34ecX0UgM0xwEqL9wA0CjPscPiK008RVXo6dyTTv5cUvM5Hi5fz7O+O4P93OHL042sOFGuD/vtCeFk=
 
-== Same plaintext encrypted twice (random salt/IV) ==
-1: U2FsdGVkX1+Z0N3PJKT2mpf1sxYISkIr82hl+M9o2NnI/mpT9uXdklAuVFttmvEEo9Opm9CWeRf8eHq2g/B4cP31ExWlvVFE6EArblNsgPQ=
-2: U2FsdGVkX190bdy8QJwyfpMQV3Zi87ATDoVn+CZkOpIKMpMbOJ8seG6CT4RjcKaDW7yZ/3RRfWIFtnzC3OiAGxfGLD81DERiBSSzv5TD0q0=
-
-== Part 3: Partner B decrypts A's ciphertext with the pre-shared key ==
-Result: LockBit affiliates use Citrix Bleed (CVE-2023-4966) for initial access. Patch NetScaler today.
-
-== Part 3: Partner A decrypts B's ciphertext with the pre-shared key ==
-Result: Meet at the SOC at 10:00, bring the MISP export.
-
-== Question: decrypting with a wrong key (netsec1) ==
-OpenSSL says:
-bad decrypt
-40078239477F0000:error:1C800064:Provider routines:ossl_cipher_unpadblock:bad decrypt:../providers/implementations/ciphers/ciphercommon_block.c:124:
-
-== Wrong key, raw output without padding check (-nopad) ==
- d6 db 18 51 da a6 c7 68 22 fa 9b e1 68 dd 6f a3
- 86 e2 f6 5d 26 6e e4 b4 f2 c2 e6 13 48 9d b4 0d
- 92 88 cb 72 9e 99 a1 49 fb d8 5c fa 54 d1 1e 9d
- 77 76 77 77 07 b5 c3 bb 5c 33 30 a8 f0 a4 a7 4c
-As text: ???Q???h"???h?o????]&n??????H??????r???I??\?T???
