@@ -75,6 +75,8 @@ The 4688 / Sysmon 1 event matches the week 5 hunt query (`-encodedcommand` in th
 
 To open it: go to [ATT&CK Navigator](https://mitre-attack.github.io/attack-navigator/), choose **Open Existing Layer** → **Upload from local** and pick the file.
 
+<img width="1376" height="862" alt="image" src="https://github.com/user-attachments/assets/b049494d-ffbb-4cb8-854b-8eb90f65e9cf" />
+
 The layer shows what we simulated, not what we can detect. The next step would be a second layer with the techniques from week 4 (the whole LockBit chain) and to compare it with this one: everything that is in the LockBit layer but not tested yet is a gap. This is what weeks 8 and 9 (emulation plan and Atomic Red Team) are for.
 
 ## References
