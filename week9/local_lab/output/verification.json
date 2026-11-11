@@ -1,0 +1,35 @@
+{
+  "verified_at_utc": "2026-11-11T11:31:27.800881+00:00",
+  "container": "threat-hunting-week9-es",
+  "running": true,
+  "image_digest": "sha256:13b4a40bb095774f5fda635e45fd5677cc6a26565e42b24997b0c72b88e75984",
+  "memory_limit_bytes": 3221225472,
+  "port_bindings": {
+    "9200/tcp": [
+      {
+        "HostIp": "127.0.0.1",
+        "HostPort": "9201"
+      }
+    ]
+  },
+  "cluster_health": "green",
+  "events": 78868,
+  "datasets": 9,
+  "query_hit_counts": [
+    1,
+    2,
+    1
+  ],
+  "source_commit": "0260464cd692874ce7772a7ffd50a58849448e85",
+  "dataset_commit": "d9d40ef123d2c87d5d3df28c96bcab4f0faccc87",
+  "original_repository_python_scripts_executed": false,
+  "system_settings_changed": false,
+  "sleep_settings_changed": false,
+  "atomic_metadata_commit": "a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6",
+  "atomic_catalog_tests": 28,
+  "selected_atomic_test_guids": 2,
+  "atomic_execution_verified": false,
+  "automated_unit_and_esql_tests_passed": 20,
+  "additional_safety_regression_checks_passed": 3,
+  "execution_mode": "recorded-equivalent"
+}

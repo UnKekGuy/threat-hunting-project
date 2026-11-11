@@ -1,0 +1,258 @@
+{
+  "repository": "https://github.com/redcanaryco/atomic-red-team",
+  "commit": "a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6",
+  "tests": [
+    {
+      "guid": "fec27f65-db86-4c2d-b66c-61945aee87c2",
+      "technique": "T1053.005",
+      "name": "Scheduled Task Startup Script",
+      "supported_platforms": [
+        "windows"
+      ],
+      "source_url": "https://github.com/redcanaryco/atomic-red-team/blob/a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6/atomics/T1053.005/T1053.005.yaml"
+    },
+    {
+      "guid": "42f53695-ad4a-4546-abb6-7d837f644a71",
+      "technique": "T1053.005",
+      "name": "Scheduled task Local",
+      "supported_platforms": [
+        "windows"
+      ],
+      "source_url": "https://github.com/redcanaryco/atomic-red-team/blob/a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6/atomics/T1053.005/T1053.005.yaml"
+    },
+    {
+      "guid": "2e5eac3e-327b-4a88-a0c0-c4057039a8dd",
+      "technique": "T1053.005",
+      "name": "Scheduled task Remote",
+      "supported_platforms": [
+        "windows"
+      ],
+      "source_url": "https://github.com/redcanaryco/atomic-red-team/blob/a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6/atomics/T1053.005/T1053.005.yaml"
+    },
+    {
+      "guid": "af9fd58f-c4ac-4bf2-a9ba-224b71ff25fd",
+      "technique": "T1053.005",
+      "name": "Powershell Cmdlet Scheduled Task",
+      "supported_platforms": [
+        "windows"
+      ],
+      "source_url": "https://github.com/redcanaryco/atomic-red-team/blob/a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6/atomics/T1053.005/T1053.005.yaml"
+    },
+    {
+      "guid": "ecd3fa21-7792-41a2-8726-2c5c673414d3",
+      "technique": "T1053.005",
+      "name": "Task Scheduler via VBA",
+      "supported_platforms": [
+        "windows"
+      ],
+      "source_url": "https://github.com/redcanaryco/atomic-red-team/blob/a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6/atomics/T1053.005/T1053.005.yaml"
+    },
+    {
+      "guid": "e16b3b75-dc9e-4cde-a23d-dfa2d0507b3b",
+      "technique": "T1053.005",
+      "name": "WMI Invoke-CimMethod Scheduled Task",
+      "supported_platforms": [
+        "windows"
+      ],
+      "source_url": "https://github.com/redcanaryco/atomic-red-team/blob/a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6/atomics/T1053.005/T1053.005.yaml"
+    },
+    {
+      "guid": "e895677d-4f06-49ab-91b6-ae3742d0a2ba",
+      "technique": "T1053.005",
+      "name": "Scheduled Task Executing Base64 Encoded Commands From Registry",
+      "supported_platforms": [
+        "windows"
+      ],
+      "source_url": "https://github.com/redcanaryco/atomic-red-team/blob/a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6/atomics/T1053.005/T1053.005.yaml"
+    },
+    {
+      "guid": "cd925593-fbb4-486d-8def-16cbdf944bf4",
+      "technique": "T1053.005",
+      "name": "Import XML Schedule Task with Hidden Attribute",
+      "supported_platforms": [
+        "windows"
+      ],
+      "source_url": "https://github.com/redcanaryco/atomic-red-team/blob/a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6/atomics/T1053.005/T1053.005.yaml"
+    },
+    {
+      "guid": "dda6fc7b-c9a6-4c18-b98d-95ec6542af6d",
+      "technique": "T1053.005",
+      "name": "PowerShell Modify A Scheduled Task",
+      "supported_platforms": [
+        "windows"
+      ],
+      "source_url": "https://github.com/redcanaryco/atomic-red-team/blob/a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6/atomics/T1053.005/T1053.005.yaml"
+    },
+    {
+      "guid": "704333ca-cc12-4bcf-9916-101844881f54",
+      "technique": "T1053.005",
+      "name": "Scheduled Task (\"Ghost Task\") via Registry Key Manipulation",
+      "supported_platforms": [
+        "windows"
+      ],
+      "source_url": "https://github.com/redcanaryco/atomic-red-team/blob/a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6/atomics/T1053.005/T1053.005.yaml"
+    },
+    {
+      "guid": "8fcfa3d5-ea7d-4e1c-bd3e-3c4ed315b7d2",
+      "technique": "T1053.005",
+      "name": "Scheduled Task Persistence via CompMgmt.msc",
+      "supported_platforms": [
+        "windows"
+      ],
+      "source_url": "https://github.com/redcanaryco/atomic-red-team/blob/a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6/atomics/T1053.005/T1053.005.yaml"
+    },
+    {
+      "guid": "02124c37-767e-4b76-9383-c9fc366d9d4c",
+      "technique": "T1053.005",
+      "name": "Scheduled Task Persistence via Eventviewer.msc",
+      "supported_platforms": [
+        "windows"
+      ],
+      "source_url": "https://github.com/redcanaryco/atomic-red-team/blob/a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6/atomics/T1053.005/T1053.005.yaml"
+    },
+    {
+      "guid": "1a73e89e-a5de-404d-9784-5c2aa0b38a29",
+      "technique": "T1053.005",
+      "name": "Turla Topinambour Dropper and Scheduled Task Persistence",
+      "supported_platforms": [
+        "windows"
+      ],
+      "source_url": "https://github.com/redcanaryco/atomic-red-team/blob/a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6/atomics/T1053.005/T1053.005.yaml"
+    },
+    {
+      "guid": "6731e8a0-5aeb-4180-8a90-4f8852e56de6",
+      "technique": "T1053.005",
+      "name": "Turla KopiLuwak Scheduled Task for JavaScript Stager",
+      "supported_platforms": [
+        "windows"
+      ],
+      "source_url": "https://github.com/redcanaryco/atomic-red-team/blob/a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6/atomics/T1053.005/T1053.005.yaml"
+    },
+    {
+      "guid": "ed366cde-7d12-49df-a833-671904770b9f",
+      "technique": "T1543.003",
+      "name": "Modify Fax service to run PowerShell",
+      "supported_platforms": [
+        "windows"
+      ],
+      "source_url": "https://github.com/redcanaryco/atomic-red-team/blob/a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6/atomics/T1543.003/T1543.003.yaml"
+    },
+    {
+      "guid": "981e2942-e433-44e9-afc1-8c957a1496b6",
+      "technique": "T1543.003",
+      "name": "Service Installation CMD",
+      "supported_platforms": [
+        "windows"
+      ],
+      "source_url": "https://github.com/redcanaryco/atomic-red-team/blob/a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6/atomics/T1543.003/T1543.003.yaml"
+    },
+    {
+      "guid": "491a4af6-a521-4b74-b23b-f7b3f1ee9e77",
+      "technique": "T1543.003",
+      "name": "Service Installation PowerShell",
+      "supported_platforms": [
+        "windows"
+      ],
+      "source_url": "https://github.com/redcanaryco/atomic-red-team/blob/a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6/atomics/T1543.003/T1543.003.yaml"
+    },
+    {
+      "guid": "ef0581fd-528e-4662-87bc-4c2affb86940",
+      "technique": "T1543.003",
+      "name": "TinyTurla backdoor service w64time",
+      "supported_platforms": [
+        "windows"
+      ],
+      "source_url": "https://github.com/redcanaryco/atomic-red-team/blob/a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6/atomics/T1543.003/T1543.003.yaml"
+    },
+    {
+      "guid": "fb4151a2-db33-4f8c-b7f8-78ea8790f961",
+      "technique": "T1543.003",
+      "name": "Remote Service Installation CMD",
+      "supported_platforms": [
+        "windows"
+      ],
+      "source_url": "https://github.com/redcanaryco/atomic-red-team/blob/a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6/atomics/T1543.003/T1543.003.yaml"
+    },
+    {
+      "guid": "1f896ce4-8070-4959-8a25-2658856a70c9",
+      "technique": "T1543.003",
+      "name": "Modify Service to Run Arbitrary Binary (Powershell)",
+      "supported_platforms": [
+        "windows"
+      ],
+      "source_url": "https://github.com/redcanaryco/atomic-red-team/blob/a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6/atomics/T1543.003/T1543.003.yaml"
+    },
+    {
+      "guid": "2382dee2-a75f-49aa-9378-f52df6ed3fb1",
+      "technique": "T1569.002",
+      "name": "Execute a Command as a Service",
+      "supported_platforms": [
+        "windows"
+      ],
+      "source_url": "https://github.com/redcanaryco/atomic-red-team/blob/a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6/atomics/T1569.002/T1569.002.yaml"
+    },
+    {
+      "guid": "873106b7-cfed-454b-8680-fa9f6400431c",
+      "technique": "T1569.002",
+      "name": "Use PsExec to execute a command on a remote host",
+      "supported_platforms": [
+        "windows"
+      ],
+      "source_url": "https://github.com/redcanaryco/atomic-red-team/blob/a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6/atomics/T1569.002/T1569.002.yaml"
+    },
+    {
+      "guid": "edbcd8c9-3639-4844-afad-455c91e95a35",
+      "technique": "T1569.002",
+      "name": "psexec.py (Impacket)",
+      "supported_platforms": [
+        "linux"
+      ],
+      "source_url": "https://github.com/redcanaryco/atomic-red-team/blob/a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6/atomics/T1569.002/T1569.002.yaml"
+    },
+    {
+      "guid": "31eb7828-97d7-4067-9c1e-c6feb85edc4b",
+      "technique": "T1569.002",
+      "name": "BlackCat pre-encryption cmds with Lateral Movement",
+      "supported_platforms": [
+        "windows"
+      ],
+      "source_url": "https://github.com/redcanaryco/atomic-red-team/blob/a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6/atomics/T1569.002/T1569.002.yaml"
+    },
+    {
+      "guid": "a5d8cdeb-be90-43a9-8b26-cc618deac1e0",
+      "technique": "T1569.002",
+      "name": "Use RemCom to execute a command on a remote host",
+      "supported_platforms": [
+        "windows"
+      ],
+      "source_url": "https://github.com/redcanaryco/atomic-red-team/blob/a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6/atomics/T1569.002/T1569.002.yaml"
+    },
+    {
+      "guid": "b8db787e-dbea-493c-96cb-9272296ddc49",
+      "technique": "T1569.002",
+      "name": "Snake Malware Service Create",
+      "supported_platforms": [
+        "windows"
+      ],
+      "source_url": "https://github.com/redcanaryco/atomic-red-team/blob/a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6/atomics/T1569.002/T1569.002.yaml"
+    },
+    {
+      "guid": "bf07f520-3909-4ef5-aa22-877a50f2f77b",
+      "technique": "T1569.002",
+      "name": "Modifying ACL of Service Control Manager via SDET",
+      "supported_platforms": [
+        "windows"
+      ],
+      "source_url": "https://github.com/redcanaryco/atomic-red-team/blob/a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6/atomics/T1569.002/T1569.002.yaml"
+    },
+    {
+      "guid": "004a5d68-627b-452d-af3d-43bd1fc75a3b",
+      "technique": "T1569.002",
+      "name": "Pipe Creation - PsExec Tool Execution From Suspicious Locations",
+      "supported_platforms": [
+        "windows"
+      ],
+      "source_url": "https://github.com/redcanaryco/atomic-red-team/blob/a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6/atomics/T1569.002/T1569.002.yaml"
+    }
+  ]
+}

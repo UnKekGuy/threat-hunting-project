@@ -1,0 +1,80 @@
+{
+  "repository": "https://github.com/redcanaryco/atomic-red-team",
+  "commit": "a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6",
+  "execution_mode": "recorded-equivalent",
+  "atomic_execution_verified": false,
+  "plan": [
+    {
+      "technique": "T1053.005",
+      "guid": "e895677d-4f06-49ab-91b6-ae3742d0a2ba",
+      "name": "Scheduled Task Executing Base64 Encoded Commands From Registry",
+      "query_file": "det-schtasks-persistence.esql",
+      "dataset": "empire_schtasks_creation_execution_elevated_user",
+      "expected_rows": 1,
+      "evidence": "Security 4698: task registration",
+      "limitation": "Registration does not prove the task ran.",
+      "supported_platforms": [
+        "windows"
+      ],
+      "executor_type": "command_prompt",
+      "source_url": "https://github.com/redcanaryco/atomic-red-team/blob/a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6/atomics/T1053.005/T1053.005.yaml",
+      "source_path": "atomics/T1053.005/T1053.005.yaml",
+      "source_sha256": "4e21312a2b23bf4b5945ef2e4b71c7e470b50b71b121bd8faddf8239c44411de",
+      "static_default_predicate_compatible": true,
+      "execution_mode": "recorded-equivalent",
+      "atomic_execution_verified": false
+    },
+    {
+      "technique": "T1053.005",
+      "guid": "e895677d-4f06-49ab-91b6-ae3742d0a2ba",
+      "name": "Scheduled Task Executing Base64 Encoded Commands From Registry",
+      "query_file": "det-schtasks-process.esql",
+      "dataset": "empire_schtasks_creation_execution_elevated_user",
+      "expected_rows": 2,
+      "evidence": "Sysmon 1 and Security 4688: the same schtasks.exe process",
+      "limitation": "Two log records do not mean two distinct processes or two Atomic executions.",
+      "supported_platforms": [
+        "windows"
+      ],
+      "executor_type": "command_prompt",
+      "source_url": "https://github.com/redcanaryco/atomic-red-team/blob/a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6/atomics/T1053.005/T1053.005.yaml",
+      "source_path": "atomics/T1053.005/T1053.005.yaml",
+      "source_sha256": "4e21312a2b23bf4b5945ef2e4b71c7e470b50b71b121bd8faddf8239c44411de",
+      "static_default_predicate_compatible": true,
+      "execution_mode": "recorded-equivalent",
+      "atomic_execution_verified": false
+    },
+    {
+      "technique": "T1569.002",
+      "guid": "2382dee2-a75f-49aa-9378-f52df6ed3fb1",
+      "name": "Execute a Command as a Service",
+      "query_file": "det-service-lateral.esql",
+      "dataset": "empire_psexec_dcerpc_tcp_svcctl",
+      "expected_rows": 1,
+      "evidence": "System / Service Control Manager 7045: service installation",
+      "related_techniques": [
+        "T1543.003"
+      ],
+      "limitation": "7045 proves installation, not successful execution or lateral movement.",
+      "supported_platforms": [
+        "windows"
+      ],
+      "executor_type": "command_prompt",
+      "source_url": "https://github.com/redcanaryco/atomic-red-team/blob/a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6/atomics/T1569.002/T1569.002.yaml",
+      "source_path": "atomics/T1569.002/T1569.002.yaml",
+      "source_sha256": "08c6b307ce3547dc49e2f0aebe794953921ff1c000a2621c7ee644ff342b3a6e",
+      "static_default_predicate_compatible": true,
+      "execution_mode": "recorded-equivalent",
+      "atomic_execution_verified": false
+    }
+  ],
+  "limitations": [
+    "No live Atomic tests have been executed. OTRF recordings are technique-level equivalents, not logs of these exact Atomic GUIDs.",
+    "Static compatibility of default metadata with query predicates is not a measured live detection result.",
+    "The selected task uses a daily schedule, whereas the OTRF example uses logon. Their names, payloads and registry paths also differ.",
+    "The selected service is local. The OTRF scenario is remote service activity. Service installation alone does not prove remote execution.",
+    "Zero hits in seven background samples is not a production false-positive rate or complete ATT&CK technique coverage.",
+    "The original queries match EventID without a provider/channel predicate; they are intended for these validated Windows datasets, not arbitrary mixed-event indices.",
+    "Scheduled task Local and T1543.003 Service Installation CMD/PowerShell defaults are not covered by the current suspicious-action filters."
+  ]
+}

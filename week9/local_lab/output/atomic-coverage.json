@@ -1,0 +1,221 @@
+{
+  "verified_at_utc": "2026-11-11T11:30:52.742105+00:00",
+  "repository": "https://github.com/redcanaryco/atomic-red-team",
+  "commit": "a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6",
+  "execution_mode": "recorded-equivalent",
+  "atomic_execution_verified": false,
+  "elasticsearch_version": "9.5.5",
+  "recorded_events": 78868,
+  "recorded_datasets": 9,
+  "mappings": [
+    {
+      "technique": "T1053.005",
+      "guid": "e895677d-4f06-49ab-91b6-ae3742d0a2ba",
+      "name": "Scheduled Task Executing Base64 Encoded Commands From Registry",
+      "query_file": "det-schtasks-persistence.esql",
+      "dataset": "empire_schtasks_creation_execution_elevated_user",
+      "expected_rows": 1,
+      "evidence": "Security 4698: task registration",
+      "limitation": "Registration does not prove the task ran.",
+      "supported_platforms": [
+        "windows"
+      ],
+      "executor_type": "command_prompt",
+      "source_url": "https://github.com/redcanaryco/atomic-red-team/blob/a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6/atomics/T1053.005/T1053.005.yaml",
+      "source_path": "atomics/T1053.005/T1053.005.yaml",
+      "source_sha256": "4e21312a2b23bf4b5945ef2e4b71c7e470b50b71b121bd8faddf8239c44411de",
+      "static_default_predicate_compatible": true,
+      "execution_mode": "recorded-equivalent",
+      "atomic_execution_verified": false,
+      "observed_rows": 1,
+      "observed_datasets": [
+        "empire_schtasks_creation_execution_elevated_user"
+      ],
+      "recorded_query_validation": "passed",
+      "query_sha256": "6a194748aa5984b9a375ba0b69c60e3660f78b11638b0c48849f887aa4ab132c"
+    },
+    {
+      "technique": "T1053.005",
+      "guid": "e895677d-4f06-49ab-91b6-ae3742d0a2ba",
+      "name": "Scheduled Task Executing Base64 Encoded Commands From Registry",
+      "query_file": "det-schtasks-process.esql",
+      "dataset": "empire_schtasks_creation_execution_elevated_user",
+      "expected_rows": 2,
+      "evidence": "Sysmon 1 and Security 4688: the same schtasks.exe process",
+      "limitation": "Two log records do not mean two distinct processes or two Atomic executions.",
+      "supported_platforms": [
+        "windows"
+      ],
+      "executor_type": "command_prompt",
+      "source_url": "https://github.com/redcanaryco/atomic-red-team/blob/a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6/atomics/T1053.005/T1053.005.yaml",
+      "source_path": "atomics/T1053.005/T1053.005.yaml",
+      "source_sha256": "4e21312a2b23bf4b5945ef2e4b71c7e470b50b71b121bd8faddf8239c44411de",
+      "static_default_predicate_compatible": true,
+      "execution_mode": "recorded-equivalent",
+      "atomic_execution_verified": false,
+      "observed_rows": 2,
+      "observed_datasets": [
+        "empire_schtasks_creation_execution_elevated_user"
+      ],
+      "recorded_query_validation": "passed",
+      "query_sha256": "5d38394c33ad1c2406f2f67ad11a391da957f352d5cd04f2b62fdeea907bb9fc"
+    },
+    {
+      "technique": "T1569.002",
+      "guid": "2382dee2-a75f-49aa-9378-f52df6ed3fb1",
+      "name": "Execute a Command as a Service",
+      "query_file": "det-service-lateral.esql",
+      "dataset": "empire_psexec_dcerpc_tcp_svcctl",
+      "expected_rows": 1,
+      "evidence": "System / Service Control Manager 7045: service installation",
+      "related_techniques": [
+        "T1543.003"
+      ],
+      "limitation": "7045 proves installation, not successful execution or lateral movement.",
+      "supported_platforms": [
+        "windows"
+      ],
+      "executor_type": "command_prompt",
+      "source_url": "https://github.com/redcanaryco/atomic-red-team/blob/a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6/atomics/T1569.002/T1569.002.yaml",
+      "source_path": "atomics/T1569.002/T1569.002.yaml",
+      "source_sha256": "08c6b307ce3547dc49e2f0aebe794953921ff1c000a2621c7ee644ff342b3a6e",
+      "static_default_predicate_compatible": true,
+      "execution_mode": "recorded-equivalent",
+      "atomic_execution_verified": false,
+      "observed_rows": 1,
+      "observed_datasets": [
+        "empire_psexec_dcerpc_tcp_svcctl"
+      ],
+      "recorded_query_validation": "passed",
+      "query_sha256": "bf1a0d88d7893cfe5fc4f3cb0fc512c771e090f32082e00659d514c24f3c2213"
+    }
+  ],
+  "limitations": [
+    "No live Atomic tests have been executed. OTRF recordings are technique-level equivalents, not logs of these exact Atomic GUIDs.",
+    "Static compatibility of default metadata with query predicates is not a measured live detection result.",
+    "The selected task uses a daily schedule, whereas the OTRF example uses logon. Their names, payloads and registry paths also differ.",
+    "The selected service is local. The OTRF scenario is remote service activity. Service installation alone does not prove remote execution.",
+    "Zero hits in seven background samples is not a production false-positive rate or complete ATT&CK technique coverage.",
+    "The original queries match EventID without a provider/channel predicate; they are intended for these validated Windows datasets, not arbitrary mixed-event indices.",
+    "Scheduled task Local and T1543.003 Service Installation CMD/PowerShell defaults are not covered by the current suspicious-action filters."
+  ],
+  "recorded_dataset_sources": [
+    {
+      "archive": "empire_schtasks_creation_execution_elevated_user.zip",
+      "source_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/atomic/windows/persistence/host/empire_schtasks_creation_execution_elevated_user.zip",
+      "git_blob_sha1": "efb17cef30affdd953cdd1f27ab739c98410eea2",
+      "sha256": "74662dc5c52f4ac2fc9dcb336bae7fb4e101217169c65adf5784b03015501d3b",
+      "records": [
+        {
+          "file": "empire_schtasks_creation_execution_elevated_user_2020-09-21175806.json",
+          "events": 59399,
+          "sha256": "1e595a94305c7a2283fb9109ae79f52906aefc0c19e2064a27fad9da2d0e27e9"
+        }
+      ]
+    },
+    {
+      "archive": "empire_psexec_dcerpc_tcp_svcctl.zip",
+      "source_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/atomic/windows/lateral_movement/host/empire_psexec_dcerpc_tcp_svcctl.zip",
+      "git_blob_sha1": "3e3de27a68b450a6167b36d10d2e8768afef8b28",
+      "sha256": "8f40e7fc86bbbf31ebd50b3ba537cf0f4378392ae3e74de84bee00aeb0de1fa5",
+      "records": [
+        {
+          "file": "empire_psexec_dcerpc_tcp_svcctl_2020-09-20121608.json",
+          "events": 4348,
+          "sha256": "968c4b699f7239d106577b2b8e206edfaf812f193a60e663966258af67a56acc"
+        }
+      ]
+    },
+    {
+      "archive": "cmd_lsass_memory_dumpert_syscalls.zip",
+      "source_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/atomic/windows/credential_access/host/cmd_lsass_memory_dumpert_syscalls.zip",
+      "git_blob_sha1": "62238d3cf2a67ca6dac5cd11746a20ef21eb50dc",
+      "sha256": "a28dbf708685a80edfb0b3d2a00c9bf196dd394fc1d61a933878841f4872a7ed",
+      "records": [
+        {
+          "file": "cmd_lsass_memory_dumpert_syscalls_2020-10-1822561997.json",
+          "events": 118,
+          "sha256": "7657d2456f111a129038376c68d97e1e37e44459e370140745cfe2007916428f"
+        }
+      ]
+    },
+    {
+      "archive": "empire_mimikatz_logonpasswords.zip",
+      "source_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/atomic/windows/credential_access/host/empire_mimikatz_logonpasswords.zip",
+      "git_blob_sha1": "908597522a7dd9471c00fefac8a0721a81cd24c4",
+      "sha256": "bb4c057b62d781be5426e011872ba1a15070c07afbb24848a14458f4b22b06fb",
+      "records": [
+        {
+          "file": "empire_mimikatz_logonpasswords_2020-08-07103224.json",
+          "events": 6026,
+          "sha256": "eee28c885baa43b564ee1c123aecf0d2a5e456b5e2ff756a83180bd92e8c4ba8"
+        }
+      ]
+    },
+    {
+      "archive": "psh_lsass_memory_dump_comsvcs.zip",
+      "source_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/atomic/windows/credential_access/host/psh_lsass_memory_dump_comsvcs.zip",
+      "git_blob_sha1": "fd8eec1c22f0cbc3c2667e9b88509df12a84a134",
+      "sha256": "0af9e920220d746432f0972be83ad057629695540aecd68c15869d190786e1ae",
+      "records": [
+        {
+          "file": "psh_lsass_memory_dump_comsvcs_2020-10-18T19500924.json",
+          "events": 184,
+          "sha256": "264d9048698e79bb7dbca12a770edd9ed947ea8a518965af747ed64e57f176e5"
+        }
+      ]
+    },
+    {
+      "archive": "rdp_interactive_taskmanager_lsass_dump.zip",
+      "source_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/atomic/windows/credential_access/host/rdp_interactive_taskmanager_lsass_dump.zip",
+      "git_blob_sha1": "fc2a7def56eafb8d2dc9088217d4615d864a0fd0",
+      "sha256": "a7761e64c891162e949afebf367084a6dddd2f3dac7b91bce870fcf9f6206fba",
+      "records": [
+        {
+          "file": "rdp_interactive_taskmanager_lsass_dump_2020-09-22043748.json",
+          "events": 5489,
+          "sha256": "cdca69c166f71a7bd9daf4b2d5d420690f6489a25abf5ee9688b01344f40f69b"
+        }
+      ]
+    },
+    {
+      "archive": "cmd_mshta_vbscript_execute_psh.zip",
+      "source_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/atomic/windows/defense_evasion/host/cmd_mshta_vbscript_execute_psh.zip",
+      "git_blob_sha1": "9c9defd5f3cf563c36291b5a98c49be5a8b13d06",
+      "sha256": "f5f700bc986bbe73edcc209754b28a3e0ad38c56877f7fc5ed6fd04bc036d9f4",
+      "records": [
+        {
+          "file": "cmd_mshta_vbscript_execute_psh_2020-10-2202580804.json",
+          "events": 1127,
+          "sha256": "25aa24b5f631f19ac23f64db116c23e632295fb5f59040e966fa47e7758b2a32"
+        }
+      ]
+    },
+    {
+      "archive": "empire_launcher_vbs.zip",
+      "source_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/atomic/windows/execution/host/empire_launcher_vbs.zip",
+      "git_blob_sha1": "876430f905878589738d79dd434bd128dda50054",
+      "sha256": "812da270cf8cda6f1948fb6275410f15dc1794d0bd6b623c9c25b2518285019c",
+      "records": [
+        {
+          "file": "empire_launcher_vbs_2020-09-04160940.json",
+          "events": 2067,
+          "sha256": "d569bc556907e23acf638b762c0acfbbecba016b6b2e07a86356151a799b661c"
+        }
+      ]
+    },
+    {
+      "archive": "psh_powershell_httplistener.zip",
+      "source_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/atomic/windows/execution/host/psh_powershell_httplistener.zip",
+      "git_blob_sha1": "ac23774536c98d7b45460fe860c95eb673b9f75d",
+      "sha256": "506ba862fd76e0f8d43396e705ec6eebb7a01a5a2954bd70c9f47802d32f4843",
+      "records": [
+        {
+          "file": "psh_powershell_httplistener_2020-11-0204130683.json",
+          "events": 110,
+          "sha256": "2a5efd9339877d390e026e2c28bcb6eda14f59b2e816b05289a7c11fa76b8e7d"
+        }
+      ]
+    }
+  ]
+}

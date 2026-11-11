@@ -1,0 +1,44 @@
+[
+  {
+    "path": "source/week9/README.md",
+    "git_blob_sha1": "a229e1ba56ad966c3eccc9c0e158ac5f64e48705",
+    "sha256": "8ecec93d092fad5264e70853aa5fc1036ca8b8d2052a57aa3e3bf6bcaa308242",
+    "url": "https://raw.githubusercontent.com/UnKekGuy/threat-hunting-project/0260464cd692874ce7772a7ffd50a58849448e85/week9/README.md"
+  },
+  {
+    "path": "source/week9/queries/det-schtasks-persistence.esql",
+    "git_blob_sha1": "4f38e243d6fae887a8e3d883c6f23c6198c749aa",
+    "sha256": "6a194748aa5984b9a375ba0b69c60e3660f78b11638b0c48849f887aa4ab132c",
+    "url": "https://raw.githubusercontent.com/UnKekGuy/threat-hunting-project/0260464cd692874ce7772a7ffd50a58849448e85/week9/queries/det-schtasks-persistence.esql"
+  },
+  {
+    "path": "source/week9/queries/det-schtasks-process.esql",
+    "git_blob_sha1": "a4dca80db340c31fa086f7716150db28727d071b",
+    "sha256": "5d38394c33ad1c2406f2f67ad11a391da957f352d5cd04f2b62fdeea907bb9fc",
+    "url": "https://raw.githubusercontent.com/UnKekGuy/threat-hunting-project/0260464cd692874ce7772a7ffd50a58849448e85/week9/queries/det-schtasks-process.esql"
+  },
+  {
+    "path": "source/week9/queries/det-service-lateral.esql",
+    "git_blob_sha1": "2faec0a78e61124d051d84074b28610ce1ac74f3",
+    "sha256": "bf1a0d88d7893cfe5fc4f3cb0fc512c771e090f32082e00659d514c24f3c2213",
+    "url": "https://raw.githubusercontent.com/UnKekGuy/threat-hunting-project/0260464cd692874ce7772a7ffd50a58849448e85/week9/queries/det-service-lateral.esql"
+  },
+  {
+    "path": "source/week9/output/results.txt",
+    "git_blob_sha1": "ace845e52d83e7b4bd92bda67469fec056526f64",
+    "sha256": "d2f1dfd1811ec4e7c04ebc7c3d46552b5eacdec3e380c00e097588f04c587cb4",
+    "url": "https://raw.githubusercontent.com/UnKekGuy/threat-hunting-project/0260464cd692874ce7772a7ffd50a58849448e85/week9/output/results.txt"
+  },
+  {
+    "path": "source/week7/scripts/load_to_elastic.py",
+    "git_blob_sha1": "3f6b7083062018a63a3082c54eaf9831f6d34da9",
+    "sha256": "b3cf511d5180800e978cb98a210f440e46f8a6ce5dd9f4dc2ba2aaae7a24763c",
+    "url": "https://raw.githubusercontent.com/UnKekGuy/threat-hunting-project/0260464cd692874ce7772a7ffd50a58849448e85/week7/scripts/load_to_elastic.py"
+  },
+  {
+    "path": "source/week7/scripts/run_esql.py",
+    "git_blob_sha1": "749fcf595c7117c8c9257e6e24e3cc1e2fca36f7",
+    "sha256": "3127d2d6c43178669f64e307ceb509edb542b16857fcc75227f5429cfd82214c",
+    "url": "https://raw.githubusercontent.com/UnKekGuy/threat-hunting-project/0260464cd692874ce7772a7ffd50a58849448e85/week7/scripts/run_esql.py"
+  }
+]

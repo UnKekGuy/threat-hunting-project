@@ -1,0 +1,3 @@
+# Preserve byte-for-byte pinned third-party snapshots, including upstream whitespace.
+atomic-red-team/atomics/** -whitespace
+source/** -whitespace

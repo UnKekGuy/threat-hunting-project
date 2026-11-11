@@ -1,0 +1,25 @@
+test_absent_guid_rejected (test_atomic_week9.AtomicMetadataTests.test_absent_guid_rejected) ... ok
+test_catalog_has_28_pinned_tests (test_atomic_week9.AtomicMetadataTests.test_catalog_has_28_pinned_tests) ... ok
+test_changed_name_rejected (test_atomic_week9.AtomicMetadataTests.test_changed_name_rejected) ... ok
+test_coverage_preserves_provenance_and_no_execution_claim (test_atomic_week9.AtomicMetadataTests.test_coverage_preserves_provenance_and_no_execution_claim) ... ok
+test_default_substitution_is_literal (test_atomic_week9.AtomicMetadataTests.test_default_substitution_is_literal) ... ok
+test_missing_default_rejected (test_atomic_week9.AtomicMetadataTests.test_missing_default_rejected) ... ok
+test_selects_two_guids_and_three_queries (test_atomic_week9.AtomicMetadataTests.test_selects_two_guids_and_three_queries) ... ok
+test_service_default_and_negative_control (test_atomic_week9.AtomicMetadataTests.test_service_default_and_negative_control) ... ok
+test_tampered_snapshot_rejected (test_atomic_week9.AtomicMetadataTests.test_tampered_snapshot_rejected) ... ok
+test_task_default_and_negative_control (test_atomic_week9.AtomicMetadataTests.test_task_default_and_negative_control) ... ok
+test_wrong_platform_rejected (test_atomic_week9.AtomicMetadataTests.test_wrong_platform_rejected) ... ok
+test_process_casing_matches (test_predicates_esql.ElasticsearchPredicateTests.test_process_casing_matches) ... ok
+test_process_security_coalesce_matches (test_predicates_esql.ElasticsearchPredicateTests.test_process_security_coalesce_matches) ... ok
+test_process_sysmon_matches (test_predicates_esql.ElasticsearchPredicateTests.test_process_sysmon_matches) ... ok
+test_service_default_matches (test_predicates_esql.ElasticsearchPredicateTests.test_service_default_matches) ... ok
+test_service_plain_executable_does_not_match (test_predicates_esql.ElasticsearchPredicateTests.test_service_plain_executable_does_not_match) ... ok
+test_service_wrong_id_does_not_match (test_predicates_esql.ElasticsearchPredicateTests.test_service_wrong_id_does_not_match) ... ok
+test_task_default_action_matches (test_predicates_esql.ElasticsearchPredicateTests.test_task_default_action_matches) ... ok
+test_task_null_does_not_match (test_predicates_esql.ElasticsearchPredicateTests.test_task_null_does_not_match) ... ok
+test_task_plain_cmd_does_not_match (test_predicates_esql.ElasticsearchPredicateTests.test_task_plain_cmd_does_not_match) ... ok
+
+----------------------------------------------------------------------
+Ran 20 tests in 0.151s
+
+OK

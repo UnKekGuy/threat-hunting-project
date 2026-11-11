@@ -1,0 +1,12 @@
+PASS: PYTHONOPTIMIZE=1 still rejects non-loopback containers before start
+VERIFIED empire_schtasks_creation_execution_elevated_user.zip 59399 events
+VERIFIED empire_psexec_dcerpc_tcp_svcctl.zip 4348 events
+VERIFIED cmd_lsass_memory_dumpert_syscalls.zip 118 events
+VERIFIED empire_mimikatz_logonpasswords.zip 6026 events
+VERIFIED psh_lsass_memory_dump_comsvcs.zip 184 events
+VERIFIED rdp_interactive_taskmanager_lsass_dump.zip 5489 events
+VERIFIED cmd_mshta_vbscript_execute_psh.zip 1127 events
+VERIFIED empire_launcher_vbs.zip 2067 events
+VERIFIED psh_powershell_httplistener.zip 110 events
+PASS: modified local manifest rejected against pinned archives
+PASS: modified source archive rejected against published Git blob SHA

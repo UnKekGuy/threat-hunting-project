@@ -1,0 +1,27 @@
+Atomic metadata: https://github.com/redcanaryco/atomic-red-team @ a0e3f9bc69fed2fd711bd1f1aa87a40c33482fe6
+Mode: recorded-equivalent. Live Atomic execution: NOT performed.
+Recorded telemetry: 78868 events in 9 OTRF datasets.
+
+T1053.005 | e895677d-4f06-49ab-91b6-ae3742d0a2ba | Scheduled Task Executing Base64 Encoded Commands From Registry
+Query: det-schtasks-persistence.esql; observed=1; recorded validation=passed
+Evidence: Security 4698: task registration
+Limit: Registration does not prove the task ran.
+
+T1053.005 | e895677d-4f06-49ab-91b6-ae3742d0a2ba | Scheduled Task Executing Base64 Encoded Commands From Registry
+Query: det-schtasks-process.esql; observed=2; recorded validation=passed
+Evidence: Sysmon 1 and Security 4688: the same schtasks.exe process
+Limit: Two log records do not mean two distinct processes or two Atomic executions.
+
+T1569.002 | 2382dee2-a75f-49aa-9378-f52df6ed3fb1 | Execute a Command as a Service
+Query: det-service-lateral.esql; observed=1; recorded validation=passed
+Evidence: System / Service Control Manager 7045: service installation
+Limit: 7045 proves installation, not successful execution or lateral movement.
+
+LIMITATIONS:
+- No live Atomic tests have been executed. OTRF recordings are technique-level equivalents, not logs of these exact Atomic GUIDs.
+- Static compatibility of default metadata with query predicates is not a measured live detection result.
+- The selected task uses a daily schedule, whereas the OTRF example uses logon. Their names, payloads and registry paths also differ.
+- The selected service is local. The OTRF scenario is remote service activity. Service installation alone does not prove remote execution.
+- Zero hits in seven background samples is not a production false-positive rate or complete ATT&CK technique coverage.
+- The original queries match EventID without a provider/channel predicate; they are intended for these validated Windows datasets, not arbitrary mixed-event indices.
+- Scheduled task Local and T1543.003 Service Installation CMD/PowerShell defaults are not covered by the current suspicious-action filters.

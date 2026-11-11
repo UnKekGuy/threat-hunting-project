@@ -50,7 +50,7 @@ FROM winlogs
 
 → 1 hit: task `\MordorElevated`, created by user `pgustavo` on `WORKSTATION5`. The task content runs PowerShell with `IEX(...FromBase64String(...))`, pulling the payload from a registry key.
 
-**Scheduled task, process side (Sysmon 1 / 4688):** → 2 hits. The `schtasks.exe /Create ... /TR "powershell ..."` process, plus the parent `powershell.exe` that launched it. This query matters because task auditing (4698) is often off, while process logging is usually on. Two angles on the same technique.
+**Scheduled task, process side (Sysmon 1 / 4688):** → 2 hits. The same `schtasks.exe /Create ... /TR "powershell ..."` process appears in two log sources: Sysmon Event ID 1 and Security Event ID 4688. The parent PowerShell is context in the Sysmon row, not a second matching process. This query matters because task auditing (4698) is often off, while process logging is usually on. Two angles on the same technique.
 
 **Service install (7045):**
 
@@ -90,3 +90,9 @@ Four of the plan's techniques are now covered with tested queries. The remaining
 2. OTRF, [Security-Datasets](https://github.com/OTRF/Security-Datasets).
 3. CISA, [AA23-325A](https://www.cisa.gov/news-events/cybersecurity-advisories/aa23-325a).
 4. MITRE ATT&CK, [T1053.005](https://attack.mitre.org/techniques/T1053/005/), [T1543.003](https://attack.mitre.org/techniques/T1543/003/), [T1569.002](https://attack.mitre.org/techniques/T1569/002/).
+
+## Reproducible Atomic-linked local lab
+
+The [local lab](local_lab/README.md) pins official Atomic Red Team YAML metadata, validates two concrete test GUIDs against three detections, and replays all nine OTRF recorded datasets into local Elasticsearch. It includes 20 checks, source/data hashes, and [a Russian defense guide](local_lab/docs/DEFENSE_GUIDE.md) (also DOCX/PDF).
+
+Important: this is recorded-equivalent validation. No live Atomic executor, prerequisite or cleanup commands were run. The report preserves the distinction between metadata validation, predicate checks and observed OTRF results. See [the Atomic coverage report](local_lab/output/atomic-coverage.txt) for limitations.

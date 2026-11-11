@@ -1,0 +1,11 @@
+/data/
+/__pycache__/
+/tests/__pycache__/
+.venv/
+/output/*.pid
+/output/*-pull.log
+/output/*-prepare.log
+/output/*-run.log
+/output/run.log
+/checks/__pycache__/
+/docs/build_defense_guide.py
