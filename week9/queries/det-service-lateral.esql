@@ -1,11 +1,21 @@
-// Gap from week 8: T1543.003 / T1569.002 service used for exec & lateral movement
-// A Windows service is installed (Security 7045) whose ImagePath runs cmd/powershell
-// or an encoded command instead of a normal binary - the PsExec/Empire pattern.
+// Gap from week 8: service-based execution / lateral movement (Security 7045 side).
+// Closes BOTH the T1543.003 and T1569.002 rows of the week 8 coverage table,
+// which share the 7045 source. A 7045 is interesting when the service it just
+// installed runs code instead of a trusted system binary, in either flavour:
+//   * command-as-service (T1569.002): ImagePath is a command interpreter with
+//     an embedded command - the PsExec / Empire remote-exec pattern;
+//   * service-install (T1543.003): a new .exe service is registered whose
+//     ImagePath is outside the normal \windows\ trees - a dropped/implanted
+//     payload (AtomicService.exe in the atomic test).
+// Together that is "a Windows service now runs something we should look at";
+// it is deliberately broad - an analyst then judges how bad ImagePath is.
 FROM winlogs
 | WHERE EventID == 7045
-  AND (TO_LOWER(ImagePath) LIKE "*powershell*"
+  AND ((TO_LOWER(ImagePath) LIKE "*powershell*"
     OR TO_LOWER(ImagePath) LIKE "*cmd*"
-    OR TO_LOWER(ImagePath) LIKE "*-enc*"
+    OR TO_LOWER(ImagePath) LIKE "*cscript*"
     OR TO_LOWER(ImagePath) LIKE "*%comspec%*")
-| KEEP @timestamp, dataset, Hostname, ServiceName, ImagePath
-| SORT @timestamp
+   OR (ENDS_WITH(TO_LOWER(ImagePath), ".exe")
+    AND NOT (STARTS_WITH(TO_LOWER(ImagePath), "c:\\windows\\"))))
+| KEEP @timestamp, dataset, HostComputer, ServiceName, ImagePath
+| SORT @timestamp DESC

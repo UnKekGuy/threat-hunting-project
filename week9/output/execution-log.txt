@@ -1,0 +1,150 @@
+# week 9 — Atomic Red Team execution log (captured, not written)
+
+# host: MASHYNACACHY\unkek   lab: wine prefix /home/unkek/wine-atomic-lab
+
+# started: 2026-11-11T12:58:12Z
+
+
+
+############################################################################
+
+# T1053.005 :: Scheduled Task Executing Base64 Encoded Commands From Registry   (atomic e895677d-4f06-49ab-91b6-ae3742d0a2ba)
+
+############################################################################
+
+
+
+$ wine reg add HKCU\SOFTWARE\ATOMIC-T1053.005 /v test /t REG_SZ /d cGluZyAxMjcuMC4wLjE= /f
+
+rc=0   started 2026-11-11T12:58:17Z
+
+reg: ������ �ᯥ譮 �����襭�
+
+
+
+$ wine schtasks.exe /Create /F /TN "ATOMIC-T1053.005" /TR "cmd /c start /min \"\" powershell.exe -Command IEX([System.Text.Encoding]::ASCII.GetString([System.Convert]::FromBase64String((Get-ItemProperty -Path HKCU:\\SOFTWARE\\ATOMIC-T1053.005).test)))" /sc daily /st 07:45
+
+rc=1   started 2026-11-11T12:58:22Z
+
+[state] HKCU payload key after the atomic's own commands ran (real):
+
+HKEY_CURRENT_USER\SOFTWARE\ATOMIC-T1053.005
+    test    REG_SZ    cGluZyAxMjcuMC4wLjE=
+
+[state] task as seen via schtasks /query (real):
+
+
+
+$ wine schtasks /query /tn "ATOMIC-T1053.005" /FO LIST
+
+rc=0   started 2026-11-11T12:58:31Z
+
+(no task — rc of schtasks /create and the query show it in the log above)
+
+
+
+$ wine schtasks /delete /tn "ATOMIC-T1053.005" /F >nul 2>&1
+
+rc=1   started 2026-11-11T12:58:37Z
+
+
+
+$ wine reg delete HKCU\SOFTWARE\ATOMIC-T1053.005 /F >nul 2>&1
+
+rc=0   started 2026-11-11T12:58:42Z
+
+
+
+############################################################################
+
+# T1543.003 :: Service Installation CMD   (atomic 981e2942-e433-44e9-afc1-8c957a1496b6)
+
+############################################################################
+
+
+
+$ wine sc.exe create AtomicTestService_CMD binPath= "C:\atomic\AtomicService.exe" start=auto  type=Own
+
+rc=0   started 2026-11-11T12:58:46Z
+
+
+
+$ wine sc.exe start AtomicTestService_CMD
+
+rc=32   started 2026-11-11T12:58:51Z
+
+[state] SCM registry ImagePath (real — what the 7045 event carries):
+
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AtomicTestService_CMD
+    ImagePath    REG_EXPAND_SZ    "C:\atomic\AtomicService.exe"
+
+
+
+$ wine sc.exe query AtomicTestService_CMD
+
+rc=0   started 2026-11-11T12:59:01Z
+
+SERVICE_NAME: AtomicTestService_CMD
+        TYPE               : 10  WIN32_OWN_PROCESS
+        STATE              : 4  RUNNING
+        WIN32_EXIT_CODE    : 0  (0x0)
+        SERVICE_EXIT_CODE  : 0  (0x0)
+        CHECKPOINT         : 0x0
+        WAIT_HINT          : 0x1388
+
+
+
+$ wine sc.exe stop AtomicTestService_CMD >nul 2>&1
+
+rc=0   started 2026-11-11T12:59:05Z
+
+
+
+$ wine sc.exe delete AtomicTestService_CMD >nul 2>&1
+
+rc=0   started 2026-11-11T12:59:10Z
+
+
+
+############################################################################
+
+# T1569.002 :: Execute a Command as a Service   (atomic 2382dee2-a75f-49aa-9378-f52df6ed3fb1)
+
+############################################################################
+
+
+
+$ wine sc.exe create ARTService binPath= "%COMSPEC% /c powershell.exe -nop -w hidden -command New-Item -ItemType File C:\art-marker.txt"
+
+rc=0   started 2026-11-11T12:59:15Z
+
+
+
+$ wine sc.exe start ARTService
+
+rc=2   started 2026-11-11T12:59:19Z
+
+
+
+$ wine sc.exe delete ARTService
+
+rc=0   started 2026-11-11T12:59:24Z
+
+
+
+$ wine del C:\art-marker.txt >nul 2>&1
+
+rc=1   started 2026-11-11T12:59:29Z
+
+[state] service command ran -> C:\art-marker.txt exists: False
+
+[state] ARTService no longer in SCM (rc=36 below = not found):
+
+
+
+$ wine sc.exe query ARTService
+
+rc=36   started 2026-11-11T12:59:33Z
+
+# finished: 2026-11-11T12:59:33Z
+

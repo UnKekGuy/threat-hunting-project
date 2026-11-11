@@ -1,10 +1,12 @@
-// Same technique seen from the process side (Sysmon 1 / Security 4688):
-// schtasks.exe /Create whose /TR action is PowerShell. Works even if
-// task auditing (4698) is off, which is common.
+// Gap from week 8: T1053.005 seen from the process-creation side (Sysmon 1).
+// schtasks.exe /Create whose /TR action is PowerShell or an encoded command.
+// Works even when task auditing (4698) is off, which is common.
 FROM winlogs
-| WHERE EventID IN (1, 4688)
-  AND ENDS_WITH(TO_LOWER(COALESCE(Image, NewProcessName)), "\\schtasks.exe")
+| WHERE EventID == 1
+  AND ENDS_WITH(TO_LOWER(Image), "\\schtasks.exe")
   AND TO_LOWER(CommandLine) LIKE "*/create*"
-  AND (TO_LOWER(CommandLine) LIKE "*powershell*" OR TO_LOWER(CommandLine) LIKE "*-enc*" OR TO_LOWER(CommandLine) LIKE "*iex*")
-| KEEP @timestamp, dataset, Hostname, User, ParentImage, CommandLine
-| SORT @timestamp
+  AND (TO_LOWER(CommandLine) LIKE "*powershell*"
+    OR TO_LOWER(CommandLine) LIKE "*-enc*"
+    OR TO_LOWER(CommandLine) LIKE "*iex*")
+| KEEP @timestamp, dataset, User, Image, ParentImage, CommandLine
+| SORT @timestamp DESC
